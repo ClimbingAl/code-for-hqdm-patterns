@@ -7,8 +7,9 @@
 # BlueJ files
 *.ctxt
 
-# Dev Tools for project
+# Dev Tools and output directories for project
 .vscode/
+example-files/
 
 # Package Files #
 *.jar
