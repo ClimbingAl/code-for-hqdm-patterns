@@ -1,1 +1,6 @@
 Prefix handler for stream writing.
+
+
+hqdmAllAsData iri fix strings to iris:
+Search:     "(?<a>.*#.*)"
+Replace     <$1>

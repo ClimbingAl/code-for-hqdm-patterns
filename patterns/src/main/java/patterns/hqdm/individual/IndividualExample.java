@@ -7,6 +7,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import patterns.hqdm.utils.FindSupertypes;
 import patterns.hqdm.utils.HqdmObjectBaseProperties;
 import patterns.hqdm.utils.PatternsUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
@@ -24,6 +25,15 @@ public class IndividualExample {
      * @return 
      */
     public static void createAndAddIndividualPattern(final List<MagmaCoreService> mcDatasets) {
+
+        // Find supertypes
+        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of("individual"));
+        supertypes.forEach(st -> { 
+                st.forEach( tl -> {
+                        System.out.println(tl.getId() + " ");
+                        }); 
+                System.out.println(" ");
+        });
 
         System.out.println( "Create Individual data objects!" );
         final MagmaCoreService individualService = MagmaCoreServiceFactory.createWithJenaDatabase();
