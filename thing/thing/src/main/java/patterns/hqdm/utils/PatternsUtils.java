@@ -1,4 +1,4 @@
-package patterns.hqdm;
+package patterns.hqdm.utils;
 
 import uk.gov.gchq.magmacore.hqdm.rdf.HqdmObjectFactory;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
@@ -7,9 +7,10 @@ import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IriBase;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 
+import static uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS.RDF_TYPE;
 import static uk.gov.gchq.magmacore.util.UID.uid;
 
-import java.io.PrintStream;
+import java.util.List;
 
 public class PatternsUtils {
 
@@ -33,8 +34,18 @@ public class PatternsUtils {
     /** A system-agreed string that states why the record was logically deleted. */
     public static final HqdmIri WHY_DELETED = new HqdmIri(PATTERNS_REF_BASE, "why_deleted");
 
-    /** A human-interpretable data and time on which this record was first created. */
+    /** A human-interpretable date and time on which this record was first created. */
     public static final HqdmIri COPIED = new HqdmIri(PATTERNS_REF_BASE, "record_copy_created");
+
+    /** A human-interpretable concise comment or description. */
+    public static final HqdmIri COMMENT = new HqdmIri(PATTERNS_REF_BASE, "comment");
+
+    // Create map of prefixes
+    public static final List<IriBase> PREFIX_LIST = List.of(
+        PatternsUtils.PATTERNS_BASE,
+        PatternsUtils.PATTERNS_REF_BASE,
+        HQDM.HQDM
+        );
 
     /**
      * Populate a new HQDM object using {@link HqdmObjectFactory} create() method to 
@@ -47,6 +58,10 @@ public class PatternsUtils {
 
         final var objId = new IRI(hqdmObjBaseProperties.getIriBase(), uid());
         final var baseObject = HqdmObjectFactory.create(hqdmObjBaseProperties.getType(), objId);
+
+        if(hqdmObjBaseProperties.getType() != null){
+            baseObject.addValue(RDF_TYPE, hqdmObjBaseProperties.getType());
+        }
 
         if(hqdmObjBaseProperties.getName() != ""){
             baseObject.addStringValue(HQDM.ENTITY_NAME, hqdmObjBaseProperties.getName());
@@ -74,18 +89,5 @@ public class PatternsUtils {
 
         return baseObject;
     }
-
-    /**
-     * Take a PrintStream of TTL as input, covert to String and replace each IRI
-     * path part to its prefix.
-     *
-     * @param streamIn {@link PrintStream} with properties to use.
-     * @return {@link String} The generated Thing, or one of its sub-types.
-     */
-    /*public static String prefixOutputStreamAsString(final PrintStream streamIn) {
-
-        String ttlString = streamIn.toString();  //new String(streamIn.toByteArray());
-        return ttlString;
-    }*/
 
 }

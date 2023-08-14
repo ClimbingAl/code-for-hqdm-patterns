@@ -1,4 +1,4 @@
-package patterns.hqdm;
+package patterns.hqdm.utils;
 
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HqdmIri;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IriBase;
@@ -13,7 +13,7 @@ public class HqdmObjectBaseProperties {
     final public String recordLogicallyDeleted;
     final public String whyDeleted;
 
-    HqdmObjectBaseProperties(
+    public HqdmObjectBaseProperties(
         HqdmIri hqdmType,
         IriBase iriBase,
         String entityName,
@@ -31,6 +31,23 @@ public class HqdmObjectBaseProperties {
         this.recordCopyCreated = recordCopyCreated;
         this.recordLogicallyDeleted = recordLogicallyDeleted;
         this.whyDeleted = whyDeleted;
+    }
+
+    public HqdmObjectBaseProperties(
+        HqdmIri hqdmType,
+        IriBase iriBase,
+        String entityName,
+        String recordCreated,
+        String recordCreator
+    ){
+        this.hqdmType = hqdmType;
+        this.iriBase = iriBase;
+        this.entityName = entityName;
+        this.recordCreated = recordCreated;
+        this.recordCreator = recordCreator;
+        this.recordCopyCreated = "";
+        this.recordLogicallyDeleted = "";
+        this.whyDeleted = "";
     }
 
     public HqdmIri getType(){
