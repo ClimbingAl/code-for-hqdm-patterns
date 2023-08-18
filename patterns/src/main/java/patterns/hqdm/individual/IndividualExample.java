@@ -9,6 +9,7 @@ import java.util.List;
 
 import patterns.hqdm.utils.FindSupertypes;
 import patterns.hqdm.utils.HqdmObjectBaseProperties;
+import patterns.hqdm.utils.MermaidUtils;
 import patterns.hqdm.utils.PatternsUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
@@ -17,6 +18,7 @@ import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 
 public class IndividualExample {
+
     /**
      * Create a new Individual and temporal part objects, construct DbTransformation for them 
      * and then commit to database.
@@ -27,7 +29,8 @@ public class IndividualExample {
     public static void createAndAddIndividualPattern(final List<MagmaCoreService> mcDatasets) {
 
         // Find supertypes
-        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of("individual"));
+        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of("physical_object", "state_of_physical_object", "kind_of_physical_object", "class_of_state_of_physical_object"));
+
         supertypes.forEach(st -> { 
                 st.forEach( tl -> {
                         System.out.println(tl.getId() + " ");
@@ -35,21 +38,23 @@ public class IndividualExample {
                 System.out.println(" ");
         });
 
+        MermaidUtils.writeSupertypeGraph(supertypes, "individual");
+
         System.out.println( "Create Individual data objects!" );
         final MagmaCoreService individualService = MagmaCoreServiceFactory.createWithJenaDatabase();
         individualService.register(PatternsUtils.PREFIX_LIST);
 
         // Create the predicates of the whole-life individual object we want to create.
         // It needs a class (SET) to be a member_of_kind of
-        final HqdmObjectBaseProperties kindOfIndividualProperties = new HqdmObjectBaseProperties(
-                HQDM.KIND_OF_INDIVIDUAL,
+        final HqdmObjectBaseProperties kindOfPhysicalObject = new HqdmObjectBaseProperties(
+                HQDM.KIND_OF_PHYSICAL_OBJECT,
                 PatternsUtils.PATTERNS_REF_BASE,
                 "KindOfIndividual__Lunar_Lander",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1"
         );
-        final Thing lunarLanderKindObject = PatternsUtils.createNewBaseObject(kindOfIndividualProperties);
-        lunarLanderKindObject.addStringValue(PatternsUtils.COMMENT, "Kind of functional system that is Lunar Lander");
+        final Thing lunarLanderKindObject = PatternsUtils.createNewBaseObject(kindOfPhysicalObject);
+        lunarLanderKindObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_functional_system_that_is_Lunar_Lander");
 
         final HqdmObjectBaseProperties classOfStateOfPhysicalObjectProperties = new HqdmObjectBaseProperties(
                 HQDM.CLASS_OF_STATE_OF_PHYSICAL_OBJECT,
@@ -59,7 +64,7 @@ public class IndividualExample {
                 "HqdmPatternProject_User1"
         );
         final Thing lunarLanderClassOfStateObject = PatternsUtils.createNewBaseObject(classOfStateOfPhysicalObjectProperties);
-        lunarLanderClassOfStateObject.addStringValue(PatternsUtils.COMMENT, "Class of state of system that is temporal part of Lunar Lander");
+        lunarLanderClassOfStateObject.addStringValue(PatternsUtils.COMMENT, "Class_of_state_of_system_that_is_temporal_part_of_Lunar_Lander");
 
         // The events need a class_of_point_in_time to be members of
         final HqdmObjectBaseProperties classOfPointInTimeProperties = new HqdmObjectBaseProperties(
@@ -70,7 +75,7 @@ public class IndividualExample {
                 "HqdmPatternProject_User1"
         );
         final Thing classOfPointInTimeObject = PatternsUtils.createNewBaseObject(classOfPointInTimeProperties);
-        classOfPointInTimeObject.addStringValue(PatternsUtils.COMMENT, "Class of point in time for events in ISO 8601-1:2019 date-time format");
+        classOfPointInTimeObject.addStringValue(PatternsUtils.COMMENT, "Class_of_point_in_time_for_events_in_ISO_8601-1:2019_date-time_format");
 
         // The events need a class_of_point_in_time to be members of
         final HqdmObjectBaseProperties classOfPossibleWorldProperties = new HqdmObjectBaseProperties(
@@ -81,7 +86,7 @@ public class IndividualExample {
                 "HqdmPatternProject_User1"
         );
         final Thing classOfPossibleWorldObject = PatternsUtils.createNewBaseObject(classOfPossibleWorldProperties);
-        classOfPossibleWorldObject.addStringValue(PatternsUtils.COMMENT, "Class of possible world for pattern examples");
+        classOfPossibleWorldObject.addStringValue(PatternsUtils.COMMENT, "Class_of_possible_world_for_pattern_examples");
 
         // Now create the Events and States
         final HqdmObjectBaseProperties possibleWorld = new HqdmObjectBaseProperties(                
@@ -91,10 +96,11 @@ public class IndividualExample {
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1");
         final Thing possibleWorldObject = PatternsUtils.createNewBaseObject( possibleWorld );
+        possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfPossibleWorldObject.getId());
 
 
-        final HqdmObjectBaseProperties individualProperties = new HqdmObjectBaseProperties(
-                HQDM.INDIVIDUAL,
+        final HqdmObjectBaseProperties physicalObject = new HqdmObjectBaseProperties(
+                HQDM.PHYSICAL_OBJECT,
                 PatternsUtils.PATTERNS_BASE,
                 "Example_individual_that_is_Lunar_Module_Eagle_LM-5",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
@@ -102,7 +108,7 @@ public class IndividualExample {
         );
 
         // Create the LM-5 lander object
-        final Thing lunarLanderObject = PatternsUtils.createNewBaseObject( individualProperties );
+        final Thing lunarLanderObject = PatternsUtils.createNewBaseObject( physicalObject );
         lunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, lunarLanderKindObject.getId());
         lunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
         // No beginning or ending as these are not known BUT a temporal part is known, the Eagle landing on the Moon
@@ -149,6 +155,7 @@ public class IndividualExample {
         stateOfLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
         stateOfLanderObject.addValue(HQDM.BEGINNING, eagleMoonLandingBeginningObject.getId());
         stateOfLanderObject.addValue(HQDM.ENDING, eagleMoonLandingEndingObject.getId());
+        stateOfLanderObject.addValue(HQDM.TEMPORAL_PART_OF, lunarLanderObject.getId());
 
         // Commit to MC database
         final DbTransformation individualChangeSet = individualService.createDbTransformation(
@@ -162,6 +169,36 @@ public class IndividualExample {
                 lunarLanderObject, 
                 stateOfLanderObject));
         individualService.runInTransaction(individualChangeSet);
+
+        // Create node-edge graphs
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, lunarLanderKindObject), 
+                List.of("record_created", "record_creator", "comment"), 
+                "individualAndKind");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world"), 
+                "temporalPartOfIncEvents");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world", "beginning", "ending"), 
+                "temporalPartOf");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
+                List.of(), 
+                "temporalPartOfAllRels");
+
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(
+                lunarLanderObject, 
+                lunarLanderKindObject, 
+                lunarLanderClassOfStateObject, 
+                classOfPossibleWorldObject,
+                classOfPointInTimeObject, 
+                possibleWorldObject,
+                eagleMoonLandingBeginningObject,
+                eagleMoonLandingEndingObject,
+                stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment"), 
+                "individualExample");
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/individualPattern.ttl");

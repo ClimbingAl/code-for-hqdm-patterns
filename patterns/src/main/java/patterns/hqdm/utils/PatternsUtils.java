@@ -20,7 +20,7 @@ public class PatternsUtils {
 
     /** IriBase for Patterns Examples data. */
     public static final IriBase PATTERNS_BASE = new IriBase("patterns", 
-        "https://github.com/ClimbingAl/code-for-hqdm-patterns/patterns-base#");
+        "https://github.com/ClimbingAl/code-for-hqdm-patterns/patterns#");
 
     /** A system-agreed date and time record on which this record was first created. */
     public static final HqdmIri CREATED = new HqdmIri(PATTERNS_REF_BASE, "record_created");
