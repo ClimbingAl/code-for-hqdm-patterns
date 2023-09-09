@@ -49,7 +49,7 @@ public class IndividualExample {
         final HqdmObjectBaseProperties kindOfPhysicalObject = new HqdmObjectBaseProperties(
                 HQDM.KIND_OF_PHYSICAL_OBJECT,
                 PatternsUtils.PATTERNS_REF_BASE,
-                "KindOfIndividual__Lunar_Lander",
+                "KindOfPhysicalObject__Lunar_Lander",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1"
         );
@@ -92,7 +92,7 @@ public class IndividualExample {
         final HqdmObjectBaseProperties possibleWorld = new HqdmObjectBaseProperties(                
                 HQDM.POSSIBLE_WORLD,
                 PatternsUtils.PATTERNS_BASE,
-                "Possible_world_for_Individual_Pattern_example",
+                "Possible_world1_for_Individual_Pattern_example",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1");
         final Thing possibleWorldObject = PatternsUtils.createNewBaseObject( possibleWorld );
@@ -114,8 +114,8 @@ public class IndividualExample {
         // No beginning or ending as these are not known BUT a temporal part is known, the Eagle landing on the Moon
 
         // Create the start and end events for the lander on the moon
-        final ZonedDateTime landedStartDateTime = ZonedDateTime.parse("1969-07-20T20:17:40+01:00[UTC]");
-        final HqdmObjectBaseProperties eagleMoonLandingBeginningProperties = new HqdmObjectBaseProperties(
+        final ZonedDateTime landedStartDateTime = ZonedDateTime.parse("1969-07-20T20:17:40+00:00[UTC]");
+        final HqdmObjectBaseProperties eagleMoonLandedBeginningProperties = new HqdmObjectBaseProperties(
                 HQDM.POINT_IN_TIME,
                 PatternsUtils.PATTERNS_BASE,
                 LocalDateTime.ofInstant(landedStartDateTime.toInstant(), ZoneOffset.UTC).toString(),
@@ -123,8 +123,8 @@ public class IndividualExample {
                 "HqdmPatternProject_User1"
         );
 
-        final ZonedDateTime landedEndDateTime = ZonedDateTime.parse("1969-07-21T17:54:01+01:00[UTC]");
-        final HqdmObjectBaseProperties eagleMoonLandingEndingProperties = new HqdmObjectBaseProperties(
+        final ZonedDateTime landedEndDateTime = ZonedDateTime.parse("1969-07-21T17:54:01+00:00[UTC]");
+        final HqdmObjectBaseProperties eagleMoonLandedEndingProperties = new HqdmObjectBaseProperties(
                 HQDM.POINT_IN_TIME,
                 PatternsUtils.PATTERNS_BASE,
                 LocalDateTime.ofInstant(landedEndDateTime.toInstant(), ZoneOffset.UTC).toString(),
@@ -132,13 +132,13 @@ public class IndividualExample {
                 "HqdmPatternProject_User1"
         );
 
-        final Thing eagleMoonLandingBeginningObject = PatternsUtils.createNewBaseObject( eagleMoonLandingBeginningProperties );
-        eagleMoonLandingBeginningObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-        eagleMoonLandingBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        final Thing eagleMoonLandedBeginningObject = PatternsUtils.createNewBaseObject( eagleMoonLandedBeginningProperties );
+        eagleMoonLandedBeginningObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
+        eagleMoonLandedBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        final Thing eagleMoonLandingEndingObject = PatternsUtils.createNewBaseObject( eagleMoonLandingEndingProperties );
-        eagleMoonLandingEndingObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-        eagleMoonLandingEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        final Thing eagleMoonLandedEndingObject = PatternsUtils.createNewBaseObject( eagleMoonLandedEndingProperties );
+        eagleMoonLandedEndingObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
+        eagleMoonLandedEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
         // Create the state of the Eagle Moon Lander on the Moon
         final HqdmObjectBaseProperties stateOfLunarLanderProperties = new HqdmObjectBaseProperties(
@@ -153,9 +153,11 @@ public class IndividualExample {
         final Thing stateOfLanderObject = PatternsUtils.createNewBaseObject( stateOfLunarLanderProperties );
         stateOfLanderObject.addValue(HQDM.MEMBER_OF, lunarLanderClassOfStateObject.getId());
         stateOfLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-        stateOfLanderObject.addValue(HQDM.BEGINNING, eagleMoonLandingBeginningObject.getId());
-        stateOfLanderObject.addValue(HQDM.ENDING, eagleMoonLandingEndingObject.getId());
+        stateOfLanderObject.addValue(HQDM.BEGINNING, eagleMoonLandedBeginningObject.getId());
+        stateOfLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
         stateOfLanderObject.addValue(HQDM.TEMPORAL_PART_OF, lunarLanderObject.getId());
+
+        lunarLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
 
         // Commit to MC database
         final DbTransformation individualChangeSet = individualService.createDbTransformation(
@@ -164,28 +166,17 @@ public class IndividualExample {
                 classOfPossibleWorldObject,
                 classOfPointInTimeObject, 
                 possibleWorldObject,
-                eagleMoonLandingBeginningObject,
-                eagleMoonLandingEndingObject,
+                eagleMoonLandedBeginningObject,
+                eagleMoonLandedEndingObject,
                 lunarLanderObject, 
                 stateOfLanderObject));
         individualService.runInTransaction(individualChangeSet);
 
-        // Create node-edge graphs
+        // Create node-edge graphs for the individual page
         MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, lunarLanderKindObject), 
                 List.of("record_created", "record_creator", "comment"), 
+                List.of(lunarLanderObject.getId().split("#")[1]),
                 "individualAndKind");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world"), 
-                "temporalPartOfIncEvents");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world", "beginning", "ending"), 
-                "temporalPartOf");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
-                List.of(), 
-                "temporalPartOfAllRels");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
                 lunarLanderObject, 
@@ -194,11 +185,53 @@ public class IndividualExample {
                 classOfPossibleWorldObject,
                 classOfPointInTimeObject, 
                 possibleWorldObject,
-                eagleMoonLandingBeginningObject,
-                eagleMoonLandingEndingObject,
+                eagleMoonLandedBeginningObject,
+                eagleMoonLandedEndingObject,
                 stateOfLanderObject), 
                 List.of("record_created", "record_creator", "comment"), 
+                List.of(lunarLanderObject.getId().split("#")[1]),
                 "individualExample");
+        
+        // Temporal Parts graphs
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(
+                        stateOfLanderObject, 
+                        eagleMoonLandedBeginningObject,
+                        eagleMoonLandedEndingObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of","temporal_part_of", "part_of_possible_world"), 
+                List.of("beginning", "ending"),
+                "temporalPartOfIncEvents");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world", "beginning", "ending"), 
+                List.of("temporal_part_of"),
+                "temporalPartOf");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "beginning", "ending"), 
+                List.of("temporal_part_of", "part_of_possible_world"),
+                "temporalPartOfAllRels");
+
+        // Set Membership
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject, lunarLanderClassOfStateObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "temporal_part_of", "part_of_possible_world", "beginning", "ending"), 
+                List.of("member_of", lunarLanderClassOfStateObject.getId().split("#")[1]),
+                "member_of");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, lunarLanderKindObject), 
+                List.of("record_created", "record_creator", "comment", "member_of", "temporal_part_of", "part_of_possible_world", "beginning", "ending"),
+                List.of("member_of_kind"), 
+                "member_of_kind");
+        
+        // Order
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "part_of_possible_world", "member_of"), 
+                List.of("beginning", "ending"),
+                "orderEvents");
+        
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject), 
+                List.of("record_created", "record_creator", "comment", "member_of_kind", "part_of_possible_world", "beginning", "ending", "member_of", "data_EntityName", "type"), 
+                List.of("temporal_part_of"),
+                "rel");
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/individualPattern.ttl");

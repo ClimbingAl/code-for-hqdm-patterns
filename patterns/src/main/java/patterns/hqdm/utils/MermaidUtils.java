@@ -10,8 +10,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jena.shacl.sys.C;
-
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
@@ -19,7 +17,7 @@ import uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS;
 
 public class MermaidUtils {
     
-    /** TBD. */
+    public static final int NAME_LENGTH_BREAK = 15;
     public static final String MERMAID_START = "``` mermaid\n" ;
     public static final String MERMAID_END = "```\n";
     public static final String GRAPH_TD = "graph TD\n";
@@ -35,6 +33,8 @@ public class MermaidUtils {
     public static final String CIRCLE_END = "))";
     public static final String STADIUM_START = "([";
     public static final String STADIUM_END = "])";
+    public static final String ROUNDED_START = "(";
+    public static final String ROUNDED_END = ")";
 
     public static final String SUPERTYPE_OF = "-->|supertype_of|";
     public static final String MEMBER_OF = "-...->|member__of|";
@@ -87,10 +87,12 @@ public class MermaidUtils {
 
                                 String stName = stThing.getPredicates().get(RDFS.RDF_TYPE).iterator().next().toString().split("#")[1];
                                 if(stName.equals("class")){stName="Class";}
-                                final String nodeNameMod;
+                                String nodeNameMod;
                                 if(nodeName.equals("class")){nodeNameMod = "Class";} else { nodeNameMod = nodeName;}
                                 if(stName!="" && (!stName.equals(nodeNameMod))){
-                                    mermaidNodeLine+=(stName + SUPERTYPE_OF + nodeNameMod );
+                                    mermaidNodeLine+=(stName + ROUNDED_START + insertBRifTooLong(stName) + ROUNDED_END + 
+                                            SUPERTYPE_OF + 
+                                            nodeNameMod + ROUNDED_START + insertBRifTooLong(nodeNameMod) + ROUNDED_END );
                                     bWriter.write(mermaidNodeLine + ";");
                                     bWriter.newLine();
                                 }    
@@ -110,13 +112,15 @@ public class MermaidUtils {
                                         scThing = node; 
                                     }
                                 }
-                                if(scThing!=null){ // Find why this is needed!
+                                if(scThing!=null){ 
                                     String stName = scThing.getPredicates().get(RDFS.RDF_TYPE).iterator().next().toString().split("#")[1];
                                     if(stName.equals("class")){stName="Class";}
-                                    final String nodeNameMod;
+                                    String nodeNameMod;
                                     if(nodeName.equals("class")){nodeNameMod = "Class";} else { nodeNameMod = nodeName;}
                                     if(stName!=""  && (!stName.equals(nodeNameMod))){
-                                        mermaidNodeLine+=(stName + SUPERTYPE_OF + nodeNameMod );
+                                        mermaidNodeLine+=(stName + ROUNDED_START + insertBRifTooLong(stName) + ROUNDED_END + 
+                                            SUPERTYPE_OF + 
+                                            nodeNameMod + ROUNDED_START + insertBRifTooLong(nodeNameMod) + ROUNDED_END );
                                         bWriter.write(mermaidNodeLine + ";");
                                         bWriter.newLine();
                                     }
@@ -171,6 +175,7 @@ public class MermaidUtils {
      */
     public static void writeLRNodeEdgeGraph(final List<Thing> nodeEdgeGroups, 
         final List<String> predicatesToExclude, 
+        final List<String> namesInBold,
         final String exampleName) {
 
         try {
@@ -199,6 +204,9 @@ public class MermaidUtils {
                             for(String str : nameArray){
                                 thingNamePrint+=" <br> " + str;
                             }
+                            if(namesInBold.contains(thingNameShort)){
+                                thingNamePrint = "<b> " + thingNamePrint;
+                            }
                             final String thingName = (thingNameShort + CIRCLE_START + "\"" + thingNamePrint + "\"" + CIRCLE_END);
 
                             objects.forEach( obj -> {
@@ -214,16 +222,26 @@ public class MermaidUtils {
                                     for(String str : nameObjArray){
                                         objNamePrint+=" <br> " + str;
                                     }
+                                    if(namesInBold.contains(objNameShort)){
+                                        objNamePrint = "<b> " + objNamePrint;
+                                    }
                                     if(objNamePrefix.contains("hqdm")){
                                         objName = objNameShort + (STADIUM_START + "\"" + objNamePrint + "\"" + STADIUM_END);
                                     } else {
                                         objName = objNameShort + (CIRCLE_START + "\"" + objNamePrint + "\"" + CIRCLE_END);
                                     }
                                 } else {
-                                    objName = obj.toString() + "[" + obj.toString() + "]";
+
+                                    objName = obj.toString() + "[\"" + insertBRifTooLong(obj.toString()) + "\"]";
                                 }
 
-                                mermaidNodeLine += ( thingName + "--->|" + predicateName + "|" + objName );
+                                String predicatePrefix = "";
+                                if(namesInBold.contains(predicateName))
+                                {
+                                    predicatePrefix = "<b> ";
+                                }
+
+                                mermaidNodeLine += ( thingName + "--->|" + "\"" + predicatePrefix + predicateName + "\"" + "|" + objName );
 
                                 try {
                                     bWriter.write( mermaidNodeLine + ";" );
@@ -256,6 +274,22 @@ public class MermaidUtils {
         id1 --->|hqdm:EntityName| p3(Example_Thing_As_Instance_Of_ <br> TopLevelHQDM_EntityType_THING);
         ```
         */
+    }
+
+    private static String insertBRifTooLong(final String inputString){
+        if(inputString.length()>NAME_LENGTH_BREAK+1){
+            int index = inputString.indexOf("_", NAME_LENGTH_BREAK);
+            if(index != -1){
+                return (inputString.substring(0, index) + " <br> " + inputString.substring(index) );
+            } else if(inputString.length() > NAME_LENGTH_BREAK + 5){
+                return (inputString.substring(0, NAME_LENGTH_BREAK) + " <br> " + inputString.substring(NAME_LENGTH_BREAK));
+            } else {
+                return inputString;
+            }
+
+        } else {
+            return inputString;
+        }
     }
 
 }
