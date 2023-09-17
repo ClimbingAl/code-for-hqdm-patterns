@@ -3,6 +3,9 @@ package patterns.hqdm;
 import java.util.ArrayList;
 import java.util.List;
 
+import patterns.hqdm.association.AssociationEagleExample;
+import patterns.hqdm.association.AssociationExample;
+import patterns.hqdm.individual.IndividualEagleExample;
 import patterns.hqdm.individual.IndividualExample;
 import patterns.hqdm.thing.ThingExample;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
@@ -21,6 +24,11 @@ public class ExamplesApp
        
         ThingExample.createAndAddThing(datasets);
         IndividualExample.createAndAddIndividualPattern(datasets);
+        IndividualEagleExample.createAndAddIndividualPattern(datasets);
+
+        AssociationExample.createAndAddAssociationPattern(datasets);
+        AssociationEagleExample.createAndAddAssociationPattern(datasets);
+
         
         System.out.println("Done\n");
 

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import patterns.hqdm.utils.FindSupertypes;
@@ -29,7 +28,7 @@ public class IndividualExample {
     public static void createAndAddIndividualPattern(final List<MagmaCoreService> mcDatasets) {
 
         // Find supertypes
-        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of("physical_object", "state_of_physical_object", "kind_of_physical_object", "class_of_state_of_physical_object"));
+        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of("individual", "state", "kind_of_individual", "class_of_state"));
 
         supertypes.forEach(st -> { 
                 st.forEach( tl -> {
@@ -46,192 +45,175 @@ public class IndividualExample {
 
         // Create the predicates of the whole-life individual object we want to create.
         // It needs a class (SET) to be a member_of_kind of
-        final HqdmObjectBaseProperties kindOfPhysicalObject = new HqdmObjectBaseProperties(
-                HQDM.KIND_OF_PHYSICAL_OBJECT,
-                PatternsUtils.PATTERNS_REF_BASE,
-                "KindOfPhysicalObject__Lunar_Lander",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
-        final Thing lunarLanderKindObject = PatternsUtils.createNewBaseObject(kindOfPhysicalObject);
-        lunarLanderKindObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_functional_system_that_is_Lunar_Lander");
+        final Thing individualKindOfXObject = PatternsUtils.createNewBaseObject(
+                new HqdmObjectBaseProperties(
+                        HQDM.KIND_OF_INDIVIDUAL,
+                        PatternsUtils.PATTERNS_REF_BASE,
+                        "KindOfIndividual_X",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ));
+        individualKindOfXObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_X");
 
-        final HqdmObjectBaseProperties classOfStateOfPhysicalObjectProperties = new HqdmObjectBaseProperties(
-                HQDM.CLASS_OF_STATE_OF_PHYSICAL_OBJECT,
-                PatternsUtils.PATTERNS_REF_BASE,
-                "ClassOfStateOfPhysicalObject__State_Of_Lunar_Lander",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
-        final Thing lunarLanderClassOfStateObject = PatternsUtils.createNewBaseObject(classOfStateOfPhysicalObjectProperties);
-        lunarLanderClassOfStateObject.addStringValue(PatternsUtils.COMMENT, "Class_of_state_of_system_that_is_temporal_part_of_Lunar_Lander");
-
-        // The events need a class_of_point_in_time to be members of
-        final HqdmObjectBaseProperties classOfPointInTimeProperties = new HqdmObjectBaseProperties(
-                HQDM.CLASS_OF_POINT_IN_TIME,
-                PatternsUtils.PATTERNS_REF_BASE,
-                "ClassOfPointInTime__ISO8601_DateTime",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
-        final Thing classOfPointInTimeObject = PatternsUtils.createNewBaseObject(classOfPointInTimeProperties);
-        classOfPointInTimeObject.addStringValue(PatternsUtils.COMMENT, "Class_of_point_in_time_for_events_in_ISO_8601-1:2019_date-time_format");
+        final Thing classOfStateOfXObject = PatternsUtils.createNewBaseObject(
+                new HqdmObjectBaseProperties(
+                        HQDM.CLASS_OF_STATE,
+                        PatternsUtils.PATTERNS_REF_BASE,
+                        "ClassOfState_X",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        classOfStateOfXObject.addStringValue(PatternsUtils.COMMENT, "Class_of_state_of_X");
 
         // The events need a class_of_point_in_time to be members of
-        final HqdmObjectBaseProperties classOfPossibleWorldProperties = new HqdmObjectBaseProperties(
-                HQDM.CLASS_OF_POSSIBLE_WORLD,
-                PatternsUtils.PATTERNS_REF_BASE,
-                "ClassOfPossibleWorld_PatternExamples",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
-        final Thing classOfPossibleWorldObject = PatternsUtils.createNewBaseObject(classOfPossibleWorldProperties);
-        classOfPossibleWorldObject.addStringValue(PatternsUtils.COMMENT, "Class_of_possible_world_for_pattern_examples");
+        final Thing classOfEventObject = PatternsUtils.createNewBaseObject(
+                new HqdmObjectBaseProperties(
+                        HQDM.CLASS_OF_EVENT,
+                        PatternsUtils.PATTERNS_REF_BASE,
+                        "ClassOfEvent_ExampleEvents",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        classOfEventObject.addStringValue(PatternsUtils.COMMENT, "Class_of_event_for_Generic_pattern_examples");
+
+        // The events need a class_of_point_in_time to be members of
+        final Thing classOfGenericPossibleWorldObject = PatternsUtils.createNewBaseObject(
+                new HqdmObjectBaseProperties(
+                        HQDM.CLASS_OF_POSSIBLE_WORLD,
+                        PatternsUtils.PATTERNS_REF_BASE,
+                        "ClassOfPossibleWorld__GenericPatternExamples",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        classOfGenericPossibleWorldObject.addStringValue(PatternsUtils.COMMENT, "Class_of_possible_world_for_generic_pattern_examples");
 
         // Now create the Events and States
-        final HqdmObjectBaseProperties possibleWorld = new HqdmObjectBaseProperties(                
-                HQDM.POSSIBLE_WORLD,
-                PatternsUtils.PATTERNS_BASE,
-                "Possible_world1_for_Individual_Pattern_example",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1");
-        final Thing possibleWorldObject = PatternsUtils.createNewBaseObject( possibleWorld );
-        possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfPossibleWorldObject.getId());
+        final Thing possibleWorldObject = PatternsUtils.createNewBaseObject(
+                new HqdmObjectBaseProperties(                
+                        HQDM.POSSIBLE_WORLD,
+                        PatternsUtils.PATTERNS_BASE,
+                        "Possible_World_for_generic_pattern_examples",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfGenericPossibleWorldObject.getId());
 
 
-        final HqdmObjectBaseProperties physicalObject = new HqdmObjectBaseProperties(
-                HQDM.PHYSICAL_OBJECT,
-                PatternsUtils.PATTERNS_BASE,
-                "Example_individual_that_is_Lunar_Module_Eagle_LM-5",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
+        // Create the start and end events for individual X
+        final Thing individualXBeginningObject = PatternsUtils.createNewBaseObject( 
+                new HqdmObjectBaseProperties(
+                        HQDM.EVENT,
+                        PatternsUtils.PATTERNS_BASE,
+                        "t0",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        individualXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+        individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        // Create the LM-5 lander object
-        final Thing lunarLanderObject = PatternsUtils.createNewBaseObject( physicalObject );
-        lunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, lunarLanderKindObject.getId());
-        lunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-        // No beginning or ending as these are not known BUT a temporal part is known, the Eagle landing on the Moon
 
-        // Create the start and end events for the lander on the moon
-        final ZonedDateTime landedStartDateTime = ZonedDateTime.parse("1969-07-20T20:17:40+00:00[UTC]");
-        final HqdmObjectBaseProperties eagleMoonLandedBeginningProperties = new HqdmObjectBaseProperties(
-                HQDM.POINT_IN_TIME,
-                PatternsUtils.PATTERNS_BASE,
-                LocalDateTime.ofInstant(landedStartDateTime.toInstant(), ZoneOffset.UTC).toString(),
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
+        final Thing individualXEndingObject = PatternsUtils.createNewBaseObject( 
+                new HqdmObjectBaseProperties(
+                        HQDM.EVENT,
+                        PatternsUtils.PATTERNS_BASE,
+                        "t3",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        individualXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+        individualXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        final ZonedDateTime landedEndDateTime = ZonedDateTime.parse("1969-07-21T17:54:01+00:00[UTC]");
-        final HqdmObjectBaseProperties eagleMoonLandedEndingProperties = new HqdmObjectBaseProperties(
-                HQDM.POINT_IN_TIME,
-                PatternsUtils.PATTERNS_BASE,
-                LocalDateTime.ofInstant(landedEndDateTime.toInstant(), ZoneOffset.UTC).toString(),
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
+        final Thing stateOfXBeginningObject = PatternsUtils.createNewBaseObject( 
+                new HqdmObjectBaseProperties(
+                        HQDM.EVENT,
+                        PatternsUtils.PATTERNS_BASE,
+                        "t1",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+        stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        final Thing eagleMoonLandedBeginningObject = PatternsUtils.createNewBaseObject( eagleMoonLandedBeginningProperties );
-        eagleMoonLandedBeginningObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-        eagleMoonLandedBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        final Thing eagleMoonLandedEndingObject = PatternsUtils.createNewBaseObject( eagleMoonLandedEndingProperties );
-        eagleMoonLandedEndingObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-        eagleMoonLandedEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        final Thing stateOfXEndingObject = PatternsUtils.createNewBaseObject( 
+                new HqdmObjectBaseProperties(
+                        HQDM.EVENT,
+                        PatternsUtils.PATTERNS_BASE,
+                        "t2",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ) );
+        stateOfXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+        stateOfXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-        // Create the state of the Eagle Moon Lander on the Moon
-        final HqdmObjectBaseProperties stateOfLunarLanderProperties = new HqdmObjectBaseProperties(
-                HQDM.INDIVIDUAL,
-                PatternsUtils.PATTERNS_BASE,
-                "Example_state_of_Lunar_Module_Eagle_LM-5",
-                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                "HqdmPatternProject_User1"
-        );
 
-        // Create the state of LM-5 lander object
-        final Thing stateOfLanderObject = PatternsUtils.createNewBaseObject( stateOfLunarLanderProperties );
-        stateOfLanderObject.addValue(HQDM.MEMBER_OF, lunarLanderClassOfStateObject.getId());
-        stateOfLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-        stateOfLanderObject.addValue(HQDM.BEGINNING, eagleMoonLandedBeginningObject.getId());
-        stateOfLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
-        stateOfLanderObject.addValue(HQDM.TEMPORAL_PART_OF, lunarLanderObject.getId());
+        // Create the individual object
+        final Thing individualXObject = PatternsUtils.createNewBaseObject( 
+                new HqdmObjectBaseProperties(
+                        HQDM.INDIVIDUAL,
+                        PatternsUtils.PATTERNS_BASE,
+                        "Example_individual_X",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ));
+        individualXObject.addValue(HQDM.MEMBER_OF_KIND, individualKindOfXObject.getId());
+        individualXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        individualXObject.addValue(HQDM.BEGINNING, individualXBeginningObject.getId());
+        individualXObject.addValue(HQDM.ENDING, individualXEndingObject.getId());
 
-        lunarLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
+        // Create the state of X
+        final Thing stateOfXObject = PatternsUtils.createNewBaseObject(  
+                new HqdmObjectBaseProperties(
+                        HQDM.STATE,
+                        PatternsUtils.PATTERNS_BASE,
+                        "Example_state_of_X",
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        "HqdmPatternProject_User1"
+                ));
+        stateOfXObject.addValue(HQDM.MEMBER_OF, classOfStateOfXObject.getId());
+        stateOfXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        stateOfXObject.addValue(HQDM.BEGINNING, stateOfXBeginningObject.getId());
+        stateOfXObject.addValue(HQDM.ENDING, stateOfXEndingObject.getId());
+        stateOfXObject.addValue(HQDM.TEMPORAL_PART_OF, individualXObject.getId());
+
 
         // Commit to MC database
         final DbTransformation individualChangeSet = individualService.createDbTransformation(
-            List.of(lunarLanderKindObject, 
-                lunarLanderClassOfStateObject, 
-                classOfPossibleWorldObject,
-                classOfPointInTimeObject, 
+            List.of(individualKindOfXObject, 
+                classOfStateOfXObject, 
+                classOfGenericPossibleWorldObject,
+                classOfEventObject, 
                 possibleWorldObject,
-                eagleMoonLandedBeginningObject,
-                eagleMoonLandedEndingObject,
-                lunarLanderObject, 
-                stateOfLanderObject));
+                individualXBeginningObject, 
+                individualXEndingObject,
+                stateOfXBeginningObject,
+                stateOfXEndingObject,
+                individualXObject,
+                stateOfXObject));
         individualService.runInTransaction(individualChangeSet);
 
         // Create node-edge graphs for the individual page
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, lunarLanderKindObject), 
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(individualXObject, individualKindOfXObject), 
                 List.of("record_created", "record_creator", "comment"), 
-                List.of(lunarLanderObject.getId().split("#")[1]),
+                List.of(individualXObject.getId().split("#")[1]),
                 "individualAndKind");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
-                lunarLanderObject, 
-                lunarLanderKindObject, 
-                lunarLanderClassOfStateObject, 
-                classOfPossibleWorldObject,
-                classOfPointInTimeObject, 
+                individualXObject, 
+                stateOfXObject,
+                individualKindOfXObject,
+                classOfStateOfXObject, 
+                classOfGenericPossibleWorldObject,
+                classOfEventObject, 
                 possibleWorldObject,
-                eagleMoonLandedBeginningObject,
-                eagleMoonLandedEndingObject,
-                stateOfLanderObject), 
+                individualXBeginningObject,
+                individualXEndingObject,
+                stateOfXBeginningObject,
+                stateOfXEndingObject ), 
                 List.of("record_created", "record_creator", "comment"), 
-                List.of(lunarLanderObject.getId().split("#")[1]),
+                List.of(individualXObject.getId().split("#")[1]),
                 "individualExample");
         
-        // Temporal Parts graphs
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(
-                        stateOfLanderObject, 
-                        eagleMoonLandedBeginningObject,
-                        eagleMoonLandedEndingObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of","temporal_part_of", "part_of_possible_world"), 
-                List.of("beginning", "ending"),
-                "temporalPartOfIncEvents");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "part_of_possible_world", "beginning", "ending"), 
-                List.of("temporal_part_of"),
-                "temporalPartOf");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "member_of", "beginning", "ending"), 
-                List.of("temporal_part_of", "part_of_possible_world"),
-                "temporalPartOfAllRels");
-
-        // Set Membership
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject, lunarLanderClassOfStateObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "temporal_part_of", "part_of_possible_world", "beginning", "ending"), 
-                List.of("member_of", lunarLanderClassOfStateObject.getId().split("#")[1]),
-                "member_of");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(lunarLanderObject, lunarLanderKindObject), 
-                List.of("record_created", "record_creator", "comment", "member_of", "temporal_part_of", "part_of_possible_world", "beginning", "ending"),
-                List.of("member_of_kind"), 
-                "member_of_kind");
-        
-        // Order
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "part_of_possible_world", "member_of"), 
-                List.of("beginning", "ending"),
-                "orderEvents");
-        
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(stateOfLanderObject), 
-                List.of("record_created", "record_creator", "comment", "member_of_kind", "part_of_possible_world", "beginning", "ending", "member_of", "data_EntityName", "type"), 
-                List.of("temporal_part_of"),
-                "rel");
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/individualPattern.ttl");

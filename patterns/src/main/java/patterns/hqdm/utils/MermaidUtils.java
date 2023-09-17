@@ -44,6 +44,7 @@ public class MermaidUtils {
      * Compute the supertype graph and write to file using Mermaid notation
      *
      * @param typeHierarchy List of layers of Thing objects representing the supertypes.
+     * @param exampleName File name of type hierarchy graph 
      */
     public static void writeSupertypeGraph(final List<List<Thing>> typeHierarchy, final String exampleName) {
 
@@ -231,7 +232,6 @@ public class MermaidUtils {
                                         objName = objNameShort + (CIRCLE_START + "\"" + objNamePrint + "\"" + CIRCLE_END);
                                     }
                                 } else {
-
                                     objName = obj.toString() + "[\"" + insertBRifTooLong(obj.toString()) + "\"]";
                                 }
 
