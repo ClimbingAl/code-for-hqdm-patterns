@@ -21,7 +21,7 @@ import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 public class AssociationExample {
 
     /**
-     * Create a new Association for Buzz Aldrin in LM, construct DbTransformation for them 
+     * Create a new Association pattern, construct DbTransformation for them 
      * and then commit to database.
      *
      * @param mcDatasets {@link List<MagmaCoreService>}.
@@ -73,21 +73,21 @@ public class AssociationExample {
         final Thing roleOfXThingObject = PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
                 HQDM.ROLE,
                 PatternsUtils.PATTERNS_REF_BASE,
-                "RoleOfX",
+                "RoleOfXInKindOfAssociation",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1"
         ) );
-        roleOfXThingObject.addStringValue(PatternsUtils.COMMENT, "Role_of_X_in_generic_association_for_generic_pattern_examples");
+        roleOfXThingObject.addStringValue(PatternsUtils.COMMENT, "Role_of_X_in_a_kind_of_association_for_generic_pattern_examples");
         roleOfXThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericAssociationObject.getId());
 
         final Thing roleOfYThingObject = PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
                 HQDM.ROLE,
                 PatternsUtils.PATTERNS_REF_BASE,
-                "RoleOfX",
+                "RoleOfYInKindOfAssociation",
                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                 "HqdmPatternProject_User1"
         ) );
-        roleOfYThingObject.addStringValue(PatternsUtils.COMMENT, "Role_of_Y_in_generic_association_for_generic_pattern_examples");
+        roleOfYThingObject.addStringValue(PatternsUtils.COMMENT, "Role_of_Y_in_a_kind_of_association_for_generic_pattern_examples");
         roleOfYThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericAssociationObject.getId());
 
         // Now add these classes to the kindOfGenericAssociation
@@ -98,11 +98,11 @@ public class AssociationExample {
                 new HqdmObjectBaseProperties(
                         HQDM.KIND_OF_INDIVIDUAL,
                         PatternsUtils.PATTERNS_REF_BASE,
-                        "KindOfIndividual_X",
+                        "KindOfIndividual_Y",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                         "HqdmPatternProject_User1"
                 ));
-        individualKindOfYObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_X");
+        individualKindOfYObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_Y");
 
         final Thing classOfStateOfYObject = PatternsUtils.createNewBaseObject(
                 new HqdmObjectBaseProperties(
@@ -224,7 +224,7 @@ public class AssociationExample {
 
             associationService.exportStatements(stmt_stream_out);
             stmt_stream_out.close();
-            System.out.println("\tData generated as statements in example-files/individualPattern.stmt.");
+            System.out.println("\tData generated as statements in example-files/associationGenericPattern.stmt.");
 
         } catch (FileNotFoundException e) {
             System.err.println("associationGenericPattern example write: " + e);

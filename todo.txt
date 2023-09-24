@@ -4,3 +4,11 @@ Prefix handler for stream writing.
 hqdmAllAsData iri fix strings to iris:
 Search:     "(?<a>.*#.*)"
 Replace     <$1>
+
+
+
+ACTIVITY MODELLER:
+- Duplicate events
+- hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2  ==> class doesn't exist
+- Final predicate: hqdm:activity hqdm:consists_of_by_class diag:e6240184-40d0-4808-acba-6dd6dc7ab952. has no identity so is vestigial.
+- OWL statements are not part of MC so are not relevant.  However, they seem to be duplicated.

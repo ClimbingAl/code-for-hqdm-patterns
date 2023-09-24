@@ -3,6 +3,8 @@ package patterns.hqdm;
 import java.util.ArrayList;
 import java.util.List;
 
+import patterns.hqdm.activity.ActivityEagleExample;
+import patterns.hqdm.activity.ActivityExample;
 import patterns.hqdm.association.AssociationEagleExample;
 import patterns.hqdm.association.AssociationExample;
 import patterns.hqdm.individual.IndividualEagleExample;
@@ -29,7 +31,9 @@ public class ExamplesApp
         AssociationExample.createAndAddAssociationPattern(datasets);
         AssociationEagleExample.createAndAddAssociationPattern(datasets);
 
-        
+        ActivityExample.createAndAddActivityPattern(datasets);
+        ActivityEagleExample.loadEagleActivityFromEditor(datasets);
+
         System.out.println("Done\n");
 
     }

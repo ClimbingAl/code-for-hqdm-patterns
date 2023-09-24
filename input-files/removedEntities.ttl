@@ -1,0 +1,98 @@
+diag:0799021d-4fd7-4c35-8675-f26e389e36e4
+
+    diag:66e7876c-a67d-4f71-ba9b-68fc4e61270a a hqdm:event;
+        hqdm:data_EntityName "447720000";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:ac211a6a-634f-40d2-aa2e-735d90ab1f9f a hqdm:event;
+        hqdm:data_EntityName "447720000";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:a9b005c9-01ed-48bc-9df2-ac78de623143 a hqdm:event;
+        hqdm:data_EntityName "447720000";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+diag:7c7bcd53-d0a6-4717-ad2e-9c148fa199ec
+
+    diag:a376022c-2dd0-4235-a25b-28a9257907dd a hqdm:event;
+        hqdm:data_EntityName "Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+    
+    diag:d2a5e812-0d70-48bd-89e7-6a73d76549d9 a hqdm:event;
+        hqdm:data_EntityName "Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:e42ba57b-f6aa-4b2c-93fc-5dea920ccdb5 a hqdm:event;
+        hqdm:data_EntityName "Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:f806dc55-68b1-4a10-b831-2c03ab476c8e a hqdm:event;
+        hqdm:data_EntityName "Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+diag:00e88efc-b7bc-4485-b2bb-1d999e062b98
+
+    diag:4791c096-a3ff-4ccf-9c00-b8fdf447f4d2 a hqdm:event;
+        hqdm:data_EntityName "-Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:738fd8ef-c928-4f1b-9a86-8f66e52fbf3d a hqdm:event;
+        hqdm:data_EntityName "-Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:81fa3c6b-6211-4a9f-9115-727352f29470 a hqdm:event;
+        hqdm:data_EntityName "-Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+    diag:dddb864e-e9b6-4cfe-aa61-17d531df3ecd a hqdm:event;
+        hqdm:data_EntityName "-Infinity";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+diag:86261210-16b6-4ae4-b268-419146320894
+
+    diag:a7003327-bb1b-42ec-baf1-0b576da82c70 a hqdm:event;
+        hqdm:data_EntityName "0";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+diag:5e206f8a-d1ed-4392-b4a2-a3cf7fb30319
+
+    diag:8accb393-6ab9-49a9-b635-a9143cdba2d8 a hqdm:event;
+        hqdm:data_EntityName "401852000";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+diag:28d4ec21-3821-4b40-804e-d00c00905240
+
+    diag:d1701cbb-3464-4c6f-9886-7127f97f0952 a hqdm:event;
+        hqdm:data_EntityName "11722999";
+        hqdm:member_of diag:c9ecb65e-4b1f-4633-ac5c-f765e36586f2;
+        hqdm:member_of_kind hqdm:event;
+        hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
+
+Other deletes:
+    hqdm:activity hqdm:consists_of_by_class diag:e6240184-40d0-4808-acba-6dd6dc7ab952;

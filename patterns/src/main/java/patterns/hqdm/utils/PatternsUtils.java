@@ -22,6 +22,10 @@ public class PatternsUtils {
     public static final IriBase PATTERNS_BASE = new IriBase("patterns", 
         "https://github.com/ClimbingAl/code-for-hqdm-patterns/patterns#");
 
+    /** IriBase for Activity Editor data. */
+    public static final IriBase ACTIVITY_EDITOR_BASE = new IriBase("diagram", 
+        "https://apollo-protocol.github.io/ns/2023/diagram-editor/diagram#");
+
     /** A system-agreed date and time record on which this record was first created. */
     public static final HqdmIri CREATED = new HqdmIri(PATTERNS_REF_BASE, "record_created");
 
@@ -44,6 +48,7 @@ public class PatternsUtils {
     public static final List<IriBase> PREFIX_LIST = List.of(
         PatternsUtils.PATTERNS_BASE,
         PatternsUtils.PATTERNS_REF_BASE,
+        PatternsUtils.ACTIVITY_EDITOR_BASE,
         HQDM.HQDM
         );
 

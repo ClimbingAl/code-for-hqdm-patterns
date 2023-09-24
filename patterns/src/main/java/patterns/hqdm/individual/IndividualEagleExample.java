@@ -94,7 +94,7 @@ public class IndividualEagleExample {
                 new HqdmObjectBaseProperties(                
                         HQDM.POSSIBLE_WORLD,
                         PatternsUtils.PATTERNS_BASE,
-                        "Possible_world1_for_pattern_examples",
+                        "Possible_world_for_Apollo_pattern_examples",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                         "HqdmPatternProject_User1"
                 ));
