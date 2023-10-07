@@ -1,16 +1,14 @@
 package patterns.hqdm.utils;
 
+import static uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS.RDF_TYPE;
+import static uk.gov.gchq.magmacore.util.UID.uid;
+import java.util.List;
+import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.HqdmObjectFactory;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HqdmIri;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IriBase;
-import uk.gov.gchq.magmacore.hqdm.model.Thing;
-
-import static uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS.RDF_TYPE;
-import static uk.gov.gchq.magmacore.util.UID.uid;
-
-import java.util.List;
 
 public class PatternsUtils {
 
@@ -23,7 +21,7 @@ public class PatternsUtils {
         "https://github.com/ClimbingAl/code-for-hqdm-patterns/patterns#");
 
     /** IriBase for Activity Editor data. */
-    public static final IriBase ACTIVITY_EDITOR_BASE = new IriBase("diagram", 
+    public static final IriBase ACTIVITY_EDITOR_BASE = new IriBase("diag", 
         "https://apollo-protocol.github.io/ns/2023/diagram-editor/diagram#");
 
     /** A system-agreed date and time record on which this record was first created. */

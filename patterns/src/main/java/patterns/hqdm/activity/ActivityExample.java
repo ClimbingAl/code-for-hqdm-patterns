@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-
 import patterns.hqdm.utils.FindSupertypes;
 import patterns.hqdm.utils.HqdmObjectBaseProperties;
 import patterns.hqdm.utils.MermaidUtils;

@@ -199,9 +199,9 @@ public class MermaidUtils {
                         final String predicateName = predicate.toString().split("#")[1];
                         if(!predicatesToExclude.contains(predicateName)){
                             final String thingNameShort = thing.getId().split("#")[1];
-                            final String thingNamePrefix = thing.getId().split("#")[0].split("ClimbingAl/code-for-hqdm-patterns/")[1];
+                            final List<String> thingNamePrefix =  Arrays. asList(thing.getId().split("#")[0].split("/"));
                             final List<String> nameArray = Arrays.asList( thingNameShort.split("(?<=\\G.{18})") );
-                            String thingNamePrint = thingNamePrefix;
+                            String thingNamePrint = thingNamePrefix.get(thingNamePrefix.size()-1);
                             for(String str : nameArray){
                                 thingNamePrint+=" <br> " + str;
                             }
@@ -232,7 +232,11 @@ public class MermaidUtils {
                                         objName = objNameShort + (CIRCLE_START + "\"" + objNamePrint + "\"" + CIRCLE_END);
                                     }
                                 } else {
-                                    objName = obj.toString() + "[\"" + insertBRifTooLong(obj.toString()) + "\"]";
+                                    String addB = "";
+                                    if(namesInBold.contains(obj.toString())){
+                                        addB = "<b> ";
+                                    }
+                                    objName = obj.toString() + "[\"" + addB + insertBRifTooLong(obj.toString()) + "\"]";
                                 }
 
                                 String predicatePrefix = "";

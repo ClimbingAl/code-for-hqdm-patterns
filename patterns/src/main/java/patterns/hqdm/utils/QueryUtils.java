@@ -6,10 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
@@ -19,9 +17,9 @@ import uk.gov.gchq.magmacore.service.transformation.DbCreateOperation;
 import uk.gov.gchq.magmacore.service.transformation.DbDeleteOperation;
 
 public class QueryUtils {
-    
+
     /**
-     * Find the HQDM object in the available MagmaCore services that matches the supplied name
+     * Find the HQDM object in the available MagmaCore services that matches the supplied name.
      *
      * @param mcDatasets List of MagmaCore services.
      * @param thingName Name of thing to search for.
@@ -50,7 +48,7 @@ public class QueryUtils {
     public static List<Thing> findThingsInServiceByPredicateAndValue(
             final List<MagmaCoreService> mcDatasets, 
             final IRI predicate, 
-            final String value) {
+            final Object value) {
         List<Thing> results = new ArrayList<>();
         mcDatasets.forEach(svc -> 
             results.addAll(svc.findByPredicateIriAndValueInTransaction(predicate, value)));            
@@ -77,7 +75,7 @@ public class QueryUtils {
      *
      * @param mcSvc MagmaCore service to dedupe events from.
      */
-    public static List<Thing> removeDuplicateEventsFromMCService(
+    /*public static List<Thing> removeDuplicateEventsFromMCService(
             final MagmaCoreService mcSvc) {
         final List<Thing> baseEventList = new ArrayList<>();
         final List<String> eventNameList = new ArrayList<>();
@@ -131,13 +129,13 @@ public class QueryUtils {
                 }
             });*/
 
-        });
+        /*});
 
         // Iterate through base event list and 
         // 1. replace predicates to it with predicate to de-duped event
         // 2. remove event from service
 
         return baseEventList;
-    } 
+    } */
 
 }

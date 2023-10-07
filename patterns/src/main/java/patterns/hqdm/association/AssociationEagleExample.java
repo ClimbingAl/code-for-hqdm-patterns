@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
-
 import patterns.hqdm.utils.FindSupertypes;
 import patterns.hqdm.utils.HqdmObjectBaseProperties;
 import patterns.hqdm.utils.MermaidUtils;
@@ -219,8 +218,11 @@ public class AssociationEagleExample {
 
         // Output files
 
-        // Create node-edge graphs for the individual page
-        MermaidUtils.writeLRNodeEdgeGraph(List.of(associationBuzzInLM5Object, participantStateOfBuzzAldrinObject, participantStateOfLunarLanderObject ), 
+        // Create node-edge graphs for the association Eagle page
+        MermaidUtils.writeLRNodeEdgeGraph(List.of(
+                associationBuzzInLM5Object, 
+                participantStateOfBuzzAldrinObject, 
+                participantStateOfLunarLanderObject ), 
                 List.of("record_created", "record_creator", "comment"), 
                 List.of(associationBuzzInLM5Object.getId().split("#")[1], participantStateOfBuzzAldrinObject.getId().split("#")[1], participantStateOfLunarLanderObject.getId().split("#")[1]),
                 "buzzInLM5AssociationAndParticipants");

@@ -5,13 +5,11 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-
-import patterns.hqdm.utils.QueryUtils;
-
 import patterns.hqdm.utils.FindSupertypes;
 import patterns.hqdm.utils.HqdmObjectBaseProperties;
 import patterns.hqdm.utils.MermaidUtils;
 import patterns.hqdm.utils.PatternsUtils;
+import patterns.hqdm.utils.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;

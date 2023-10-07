@@ -36,7 +36,7 @@ diag:0799021d-4fd7-4c35-8675-f26e389e36e4 a hqdm:event;
     hqdm:member_of_kind hqdm:event;
     hqdm:part_of_possible_world diag:dc85065c-feba-441c-a5db-d23346f49155.
 diag:090f65fd-4d36-49e1-8b95-979a56545306 a hqdm:pattern;
-    hqdm:data_EntityName "Apollo-11 Rocket Asembly";
+    hqdm:data_EntityName "SA-506";
     hqdm:member_of_kind hqdm:pattern.
 diag:094d31d1-b0a0-4920-bd51-3cd63413eafd a hqdm:state_of_ordinary_physical_object;
     hqdm:beginning diag:86261210-16b6-4ae4-b268-419146320894;
