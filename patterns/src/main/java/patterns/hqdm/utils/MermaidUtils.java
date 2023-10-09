@@ -233,10 +233,14 @@ public class MermaidUtils {
                                     }
                                 } else {
                                     String addB = "";
+                                    String tmpName = obj.toString();
+                                    if(tmpName.contains(" ")){
+                                        tmpName = tmpName.replace(" ", "_");
+                                    }
                                     if(namesInBold.contains(obj.toString())){
                                         addB = "<b> ";
                                     }
-                                    objName = obj.toString() + "[\"" + addB + insertBRifTooLong(obj.toString()) + "\"]";
+                                    objName = tmpName + "[\"" + addB + insertBRifTooLong(tmpName) + "\"]";
                                 }
 
                                 String predicatePrefix = "";

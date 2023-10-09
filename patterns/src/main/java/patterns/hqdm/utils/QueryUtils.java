@@ -56,6 +56,27 @@ public class QueryUtils {
     }
 
     /**
+     * Find the HQDM object in the available MagmaCore services that matches the supplied id
+     *
+     * @param mcDatasets List of MagmaCore services.
+     * @param id Id of thing to search for.
+     */
+    public static Thing getThingInServicesById(
+            final List<MagmaCoreService> mcDatasets, 
+            final Object id) {
+        Thing finalResult = null;
+        String idAsString = id.toString();
+        for(MagmaCoreService svc: mcDatasets){
+             Thing result = svc.getInTransaction( new IRI (idAsString));
+             if(result != null){
+                finalResult = result;
+             }
+        }
+        
+        return finalResult;
+    }
+
+    /**
      * Find the HQDM object in the available MagmaCore services that matches the supplied name
      *
      * @param thingList List of things to search in.
