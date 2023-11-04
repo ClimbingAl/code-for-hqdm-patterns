@@ -54,7 +54,7 @@ public class PatternsUtils {
      * Populate a new HQDM object using {@link HqdmObjectFactory} create() method to 
      * generate a new Thing and add any supplied base properties.
      *
-     * @param mcService {@link HqdmObjectBaseProperties} with properties to use.
+     * @param hqdmObjBaseProperties {@link HqdmObjectBaseProperties} with properties to use.
      * @return {@link Thing} The generated Thing, or one of its sub-types.
      */
     public static Thing createNewBaseObject(final HqdmObjectBaseProperties hqdmObjBaseProperties) {
@@ -91,6 +91,44 @@ public class PatternsUtils {
         }
 
         return baseObject;
+    }
+
+    /**
+     * Populate an existing HQDM object with any supplied base properties.
+     *
+     * @param thing {@link Thing} to add properties to.
+     * @param hqdmObjBaseProperties {@link HqdmObjectBaseProperties} with properties to use.
+     */
+    public static void addBasePropertiesToThing(final Thing thing, final HqdmObjectBaseProperties hqdmObjBaseProperties) {
+
+        if(hqdmObjBaseProperties.getType() != null){
+            thing.addValue(RDF_TYPE, hqdmObjBaseProperties.getType());
+        }
+
+        if(hqdmObjBaseProperties.getName() != ""){
+            thing.addStringValue(HQDM.ENTITY_NAME, hqdmObjBaseProperties.getName());
+        }
+
+        if(hqdmObjBaseProperties.getCreated() != ""){
+            thing.addStringValue(CREATED, hqdmObjBaseProperties.getCreated());
+        }
+
+        if(hqdmObjBaseProperties.getCreator() != ""){
+            thing.addStringValue(CREATOR, hqdmObjBaseProperties.getCreator());
+        }
+
+        if(hqdmObjBaseProperties.getLogicallyDeleted() != ""){
+            thing.addStringValue(DELETED, hqdmObjBaseProperties.getLogicallyDeleted());
+        }
+
+        if(hqdmObjBaseProperties.getWhyDeleted() != ""){
+            thing.addStringValue(WHY_DELETED, hqdmObjBaseProperties.getWhyDeleted());
+        }
+
+        if(hqdmObjBaseProperties.getCopyCreated() != ""){
+            thing.addStringValue(COPIED, hqdmObjBaseProperties.getCopyCreated());
+        }
+
     }
 
 }

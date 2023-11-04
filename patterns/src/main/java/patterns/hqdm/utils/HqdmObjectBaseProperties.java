@@ -50,6 +50,22 @@ public class HqdmObjectBaseProperties {
         this.whyDeleted = "";
     }
 
+    public HqdmObjectBaseProperties(
+        IriBase iriBase,
+        String entityName,
+        String recordCreated,
+        String recordCreator
+    ){
+        this.hqdmType = null;
+        this.iriBase = iriBase;
+        this.entityName = entityName;
+        this.recordCreated = recordCreated;
+        this.recordCreator = recordCreator;
+        this.recordCopyCreated = "";
+        this.recordLogicallyDeleted = "";
+        this.whyDeleted = "";
+    }
+
     public HqdmIri getType(){
         return hqdmType;
     }

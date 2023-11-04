@@ -76,7 +76,6 @@ public class IndividualExample {
                 ) );
         classOfEventObject.addStringValue(PatternsUtils.COMMENT, "Class_of_event_for_Generic_pattern_examples");
 
-        // The events need a class_of_point_in_time to be members of
         final Thing classOfGenericPossibleWorldObject = PatternsUtils.createNewBaseObject(
                 new HqdmObjectBaseProperties(
                         HQDM.CLASS_OF_POSSIBLE_WORLD,
@@ -98,7 +97,6 @@ public class IndividualExample {
                 ) );
         possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfGenericPossibleWorldObject.getId());
 
-
         // Create the start and end events for individual X
         final Thing individualXBeginningObject = PatternsUtils.createNewBaseObject( 
                 new HqdmObjectBaseProperties(
@@ -110,7 +108,6 @@ public class IndividualExample {
                 ) );
         individualXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
         individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-
 
         final Thing individualXEndingObject = PatternsUtils.createNewBaseObject( 
                 new HqdmObjectBaseProperties(
@@ -133,7 +130,6 @@ public class IndividualExample {
                 ) );
         stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
         stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-
 
         final Thing stateOfXEndingObject = PatternsUtils.createNewBaseObject( 
                 new HqdmObjectBaseProperties(
