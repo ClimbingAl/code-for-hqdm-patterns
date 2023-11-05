@@ -31,12 +31,12 @@ public class AssociationEagleExample {
 
                 // Find supertypes
                 List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of(
-                        "association", 
-                        "participant",
-                        "state_of_person", 
-                        "state_of_functional_object", 
-                        "kind_of_association", 
-                        "role"));
+                                "association",
+                                "participant",
+                                "state_of_person",
+                                "state_of_functional_object",
+                                "kind_of_association",
+                                "role"));
 
                 supertypes.forEach(st -> {
                         st.forEach(tl -> {
