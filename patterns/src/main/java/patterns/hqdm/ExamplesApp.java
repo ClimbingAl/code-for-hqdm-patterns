@@ -14,17 +14,17 @@ import patterns.hqdm.thing.ThingExample;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 
 /**
- * Create a very basic HQDM data object; an instance of Thing.
+ * Create a list of MagmaCoreServices and populate with examples generated from
+ * code and in ttl input files.
  *
  */
-public class ExamplesApp 
-{
-    public static void main( String[] args )
-    {
+public class ExamplesApp {
+    public static void main(String[] args) {
 
         // Create list of datasets to be used for example generation
         final List<MagmaCoreService> datasets = new ArrayList<MagmaCoreService>();
-       
+
+        // Now generate the examples in order
         ThingExample.createAndAddThing(datasets);
         IndividualExample.createAndAddIndividualPattern(datasets);
         IndividualEagleExample.createAndAddIndividualPattern(datasets);
@@ -38,7 +38,7 @@ public class ExamplesApp
         SignExample.createAndAddSignPattern(datasets);
         IdentifierApolloExample.fetchApolloIdentifierFromActivityEditor(datasets);
 
-        System.out.println("Done\n");
+        System.out.println("Example file generation done.\n");
 
     }
 }

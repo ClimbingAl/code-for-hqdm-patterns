@@ -14,15 +14,14 @@ public class HqdmObjectBaseProperties {
     final public String whyDeleted;
 
     public HqdmObjectBaseProperties(
-        HqdmIri hqdmType,
-        IriBase iriBase,
-        String entityName,
-        String recordCreated,
-        String recordCreator,
-        String recordCopyCreated,
-        String recordLogicallyDeleted,
-        String whyDeleted
-    ){
+            HqdmIri hqdmType,
+            IriBase iriBase,
+            String entityName,
+            String recordCreated,
+            String recordCreator,
+            String recordCopyCreated,
+            String recordLogicallyDeleted,
+            String whyDeleted) {
         this.hqdmType = hqdmType;
         this.iriBase = iriBase;
         this.entityName = entityName;
@@ -34,12 +33,11 @@ public class HqdmObjectBaseProperties {
     }
 
     public HqdmObjectBaseProperties(
-        HqdmIri hqdmType,
-        IriBase iriBase,
-        String entityName,
-        String recordCreated,
-        String recordCreator
-    ){
+            HqdmIri hqdmType,
+            IriBase iriBase,
+            String entityName,
+            String recordCreated,
+            String recordCreator) {
         this.hqdmType = hqdmType;
         this.iriBase = iriBase;
         this.entityName = entityName;
@@ -51,11 +49,10 @@ public class HqdmObjectBaseProperties {
     }
 
     public HqdmObjectBaseProperties(
-        IriBase iriBase,
-        String entityName,
-        String recordCreated,
-        String recordCreator
-    ){
+            IriBase iriBase,
+            String entityName,
+            String recordCreated,
+            String recordCreator) {
         this.hqdmType = null;
         this.iriBase = iriBase;
         this.entityName = entityName;
@@ -66,35 +63,35 @@ public class HqdmObjectBaseProperties {
         this.whyDeleted = "";
     }
 
-    public HqdmIri getType(){
+    public HqdmIri getType() {
         return hqdmType;
     }
 
-    public IriBase getIriBase(){
+    public IriBase getIriBase() {
         return iriBase;
     }
 
-    public String getName(){
+    public String getName() {
         return entityName;
     }
 
-    public String getCreated(){
+    public String getCreated() {
         return recordCreated;
     }
 
-    public String getCreator(){
+    public String getCreator() {
         return recordCreator;
     }
 
-    public String getCopyCreated(){
+    public String getCopyCreated() {
         return recordCopyCreated;
     }
 
-    public String getLogicallyDeleted(){
+    public String getLogicallyDeleted() {
         return recordLogicallyDeleted;
     }
 
-    public String getWhyDeleted(){
+    public String getWhyDeleted() {
         return whyDeleted;
     }
 

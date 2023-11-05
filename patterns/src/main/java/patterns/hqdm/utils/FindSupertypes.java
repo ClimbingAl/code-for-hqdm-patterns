@@ -17,7 +17,7 @@ import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 
 public class FindSupertypes {
-    
+
     /**
      * Compute the type hierarchy using hqdmAllAsData
      *
@@ -38,19 +38,21 @@ public class FindSupertypes {
 
         } catch (FileNotFoundException e) {
             System.err.println("hqdmAllAsData not found: " + e);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             System.err.println("hqdmAllAsData io error: " + ioe);
         }
 
         final List<Thing> inputTypes = new ArrayList<Thing>();
-        types.forEach( typeToResove -> {
+        types.forEach(typeToResove -> {
             List<Thing> queryResults = null;
-            if(hqdmService != null){
-                //queryResults = hqdmService.findByEntityNameInTransaction(List.of(typeToResove.toLowerCase()));
-                queryResults = hqdmService.findByPredicateIriAndValueInTransaction(RDFS.RDF_TYPE, new IRI(HQDM.HQDM, typeToResove.toLowerCase()));
+            if (hqdmService != null) {
+                // queryResults =
+                // hqdmService.findByEntityNameInTransaction(List.of(typeToResove.toLowerCase()));
+                queryResults = hqdmService.findByPredicateIriAndValueInTransaction(RDFS.RDF_TYPE,
+                        new IRI(HQDM.HQDM, typeToResove.toLowerCase()));
             }
-            if(queryResults != null){
-                if(!inputTypes.contains(queryResults.get(0))){
+            if (queryResults != null) {
+                if (!inputTypes.contains(queryResults.get(0))) {
                     inputTypes.add(queryResults.get(0));
                 }
             }
@@ -60,38 +62,39 @@ public class FindSupertypes {
         List<Thing> currentTypes = List.copyOf(inputTypes);
 
         boolean atThing = false;
-        do{
+        do {
             final List<Thing> nextTypes = new ArrayList<>();
-            currentTypes.forEach( ct -> {
-                findImmediateSuperTypes( ct, hqdmService).forEach(st -> {
+            currentTypes.forEach(ct -> {
+                findImmediateSuperTypes(ct, hqdmService).forEach(st -> {
                     boolean typeAlreadyInList = false;
-                    for( List<Thing> thl : typeHierarchy) {
-                        for( Thing th : thl ){
-                            if(th.getId().equals(st.getId())){
+                    for (List<Thing> thl : typeHierarchy) {
+                        for (Thing th : thl) {
+                            if (th.getId().equals(st.getId())) {
                                 typeAlreadyInList = true;
                             }
                         }
-                    };
-                    if(!typeAlreadyInList){
+                    }
+                    ;
+                    if (!typeAlreadyInList) {
                         boolean alreadyInNext = false;
-                        for(Thing nxt : nextTypes){
-                            if(nxt.getId().equals(st.getId())){
+                        for (Thing nxt : nextTypes) {
+                            if (nxt.getId().equals(st.getId())) {
                                 alreadyInNext = true;
                             }
                         }
-                        if(!alreadyInNext){
+                        if (!alreadyInNext) {
                             nextTypes.add(st);
                         }
-                        
+
                     }
                 });
             });
 
-            if(nextTypes.size()>0){
+            if (nextTypes.size() > 0) {
                 typeHierarchy.add(nextTypes);
                 currentTypes = List.copyOf(nextTypes);
-                for(Thing ct : currentTypes){
-                    if(ct.getId().contains("e5ec5d9e-afea-44f7-93c9-699cd5072d90")){
+                for (Thing ct : currentTypes) {
+                    if (ct.getId().contains("e5ec5d9e-afea-44f7-93c9-699cd5072d90")) {
                         atThing = true;
                     } else {
                         atThing = false;
@@ -101,7 +104,7 @@ public class FindSupertypes {
                 atThing = true;
             }
 
-        } while( !atThing );
+        } while (!atThing);
 
         return typeHierarchy;
 
@@ -110,43 +113,43 @@ public class FindSupertypes {
     private static List<Thing> findImmediateSuperTypes(final Thing type, MagmaCoreService hqdmService) {
 
         final List<Thing> superTypes = new ArrayList<Thing>();
-        
+
         Set<Object> stSet;
-        Map<Object,Set<Object>> stPredicates = type.getPredicates();
+        Map<Object, Set<Object>> stPredicates = type.getPredicates();
         stSet = stPredicates.get(HQDM.HAS_SUPERTYPE);
         Set<Object> scSet;
         scSet = stPredicates.get(HQDM.HAS_SUPERCLASS);
-        if(scSet != null){
-            if(stSet==null){
+        if (scSet != null) {
+            if (stSet == null) {
                 stSet = new HashSet<Object>();
             }
             for (Object obj : scSet) {
                 boolean selfReferenceTest = false;
 
-                if(obj!=null){
-                    if(stSet!=null){
-                        for(Object typ : stSet){      
-                            if( obj.toString().equals(typ.toString()) ){
+                if (obj != null) {
+                    if (stSet != null) {
+                        for (Object typ : stSet) {
+                            if (obj.toString().equals(typ.toString())) {
                                 selfReferenceTest = true;
                             }
                         }
                     }
                 }
-                if(!selfReferenceTest){
+                if (!selfReferenceTest) {
                     stSet.add(obj);
                 }
             }
 
         }
-        if(stSet != null){
-            for(Object stObj: stSet){
-                Thing stQueryResult = hqdmService.getInTransaction( (IRI) stObj);
-                if(stQueryResult != null){
+        if (stSet != null) {
+            for (Object stObj : stSet) {
+                Thing stQueryResult = hqdmService.getInTransaction((IRI) stObj);
+                if (stQueryResult != null) {
                     superTypes.add(stQueryResult);
                 }
             }
         }
-    
+
         return superTypes;
 
     }

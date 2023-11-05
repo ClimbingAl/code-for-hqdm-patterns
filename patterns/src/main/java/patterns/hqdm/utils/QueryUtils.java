@@ -10,18 +10,19 @@ import uk.gov.gchq.magmacore.service.MagmaCoreService;
 public class QueryUtils {
 
     /**
-     * Find the HQDM object in the available MagmaCore services that matches the supplied name.
+     * Find the HQDM object in the available MagmaCore services that matches the
+     * supplied name.
      *
      * @param mcDatasets List of MagmaCore services.
-     * @param thingName Name of thing to search for.
+     * @param thingName  Name of thing to search for.
      */
     public static Thing findThingInServiceByName(
-            final List<MagmaCoreService> mcDatasets, 
+            final List<MagmaCoreService> mcDatasets,
             final String thingName) {
-        for(MagmaCoreService svc : mcDatasets){
+        for (MagmaCoreService svc : mcDatasets) {
             List<Thing> results = svc.findByPredicateIriInTransaction(HQDM.ENTITY_NAME);
-           for(Thing res: results){
-                if(res.getPredicates().get(HQDM.ENTITY_NAME).iterator().next().toString().equals(thingName)){
+            for (Thing res : results) {
+                if (res.getPredicates().get(HQDM.ENTITY_NAME).iterator().next().toString().equals(thingName)) {
                     return res;
                 }
             }
@@ -30,55 +31,58 @@ public class QueryUtils {
     }
 
     /**
-     * Find the HQDM object in the available MagmaCore services that matches the supplied predicate and value
+     * Find the HQDM object in the available MagmaCore services that matches the
+     * supplied predicate and value
      *
      * @param mcDatasets List of MagmaCore services.
-     * @param predicate HQDM predicate.
-     * @param value Name of thing to search for.
+     * @param predicate  HQDM predicate.
+     * @param value      Name of thing to search for.
      */
     public static List<Thing> findThingsInServiceByPredicateAndValue(
-            final List<MagmaCoreService> mcDatasets, 
-            final IRI predicate, 
+            final List<MagmaCoreService> mcDatasets,
+            final IRI predicate,
             final Object value) {
         List<Thing> results = new ArrayList<>();
         mcDatasets.forEach(svc -> 
-            results.addAll(svc.findByPredicateIriAndValueInTransaction(predicate, value)));            
+            results.addAll(svc.findByPredicateIriAndValueInTransaction(predicate, value)));
         return results;
     }
 
     /**
-     * Find the HQDM object in the available MagmaCore services that matches the supplied id
+     * Find the HQDM object in the available MagmaCore services that matches the
+     * supplied id
      *
      * @param mcDatasets List of MagmaCore services.
-     * @param id Id of thing to search for.
+     * @param id         Id of thing to search for.
      */
     public static Thing getThingInServicesById(
-            final List<MagmaCoreService> mcDatasets, 
+            final List<MagmaCoreService> mcDatasets,
             final Object id) {
         Thing finalResult = null;
         String idAsString = id.toString();
-        for(MagmaCoreService svc: mcDatasets){
-             Thing result = svc.getInTransaction( new IRI (idAsString));
-             if(result != null){
+        for (MagmaCoreService svc : mcDatasets) {
+            Thing result = svc.getInTransaction(new IRI(idAsString));
+            if (result != null) {
                 finalResult = result;
-             }
+            }
         }
-        
+
         return finalResult;
     }
 
     /**
-     * Find the HQDM object in the available MagmaCore services that matches the supplied name
+     * Find the HQDM object in the available MagmaCore services that matches the
+     * supplied name
      *
      * @param thingList List of things to search in.
      * @param thingName Name of thing to search for.
      */
-    public static Thing findThingByNameInList( final List<Thing> thingList, final String thingName) {
-        for(Thing th: thingList){
-            if( th.hasThisStringValue(HQDM.ENTITY_NAME, thingName) ){
+    public static Thing findThingByNameInList(final List<Thing> thingList, final String thingName) {
+        for (Thing th : thingList) {
+            if (th.hasThisStringValue(HQDM.ENTITY_NAME, thingName)) {
                 return th;
             }
-        }          
+        }
         return null;
     }
 

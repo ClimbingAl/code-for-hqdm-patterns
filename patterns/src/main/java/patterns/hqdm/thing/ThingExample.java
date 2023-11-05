@@ -18,14 +18,15 @@ import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 public class ThingExample {
 
     /**
-     * Create a new Thing object, construct DbTransformation for it and then commit to database.
+     * Create a new Thing object, construct DbTransformation for it and then commit
+     * to database.
      *
      * @param mcDatasets {@link List<MagmaCoreService>}.
-     * @return 
+     * @return
      */
     public static void createAndAddThing(final List<MagmaCoreService> mcDatasets) {
 
-        System.out.println( "Create Thing data object!" );
+        System.out.println("Create Thing data object!");
         final MagmaCoreService thingService = MagmaCoreServiceFactory.createWithJenaDatabase();
         thingService.register(PatternsUtils.PREFIX_LIST);
 
@@ -40,11 +41,10 @@ public class ThingExample {
                 "HqdmPatternProject_User1",
                 "",
                 "",
-                ""
-        );
+                "");
 
         // Create the object
-        final Thing thingObject = PatternsUtils.createNewBaseObject( thingProperties );
+        final Thing thingObject = PatternsUtils.createNewBaseObject(thingProperties);
 
         // Commit to MC database
         final DbTransformation thingChangeSet = thingService.createDbTransformation(List.of(thingObject));
@@ -67,5 +67,5 @@ public class ThingExample {
         mcDatasets.add(thingService);
 
     }
-    
+
 }

@@ -40,230 +40,230 @@ import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 
 public class SignExample {
-    /**
-     * Create a new Sign data model pattern, using the MagmaCore-
-     * hqdm.rdfbuilders to construct the model.
-     *
-     * @param mcDatasets {@link List<MagmaCoreService>}.
-     * @return 
-     */
-    public static void createAndAddSignPattern(final List<MagmaCoreService> mcDatasets) {
+        /**
+         * Create a new Sign data model pattern, using the MagmaCore-
+         * hqdm.rdfbuilders to construct the model.
+         *
+         * @param mcDatasets {@link List<MagmaCoreService>}.
+         * @return
+         */
+        public static void createAndAddSignPattern(final List<MagmaCoreService> mcDatasets) {
 
-        // Find supertypes
-        List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of(
-            "sign", 
-            "representation_by_sign", 
-            "recognizing_language_community", 
-            "class_of_representation",
-            "class_of_sign",
-            "kind_of_organization",
-            "role"));
+                // Find supertypes
+                List<List<Thing>> supertypes = FindSupertypes.findSuperTypes(List.of(
+                                "sign",
+                                "representation_by_sign",
+                                "recognizing_language_community",
+                                "class_of_representation",
+                                "class_of_sign",
+                                "kind_of_organization",
+                                "role"));
 
-        supertypes.forEach(st -> { 
-                st.forEach( tl -> {
-                        System.out.println(tl.getId() + " ");
-                        }); 
-                System.out.println(" ");
-        });
+                supertypes.forEach(st -> {
+                        st.forEach(tl -> {
+                                System.out.println(tl.getId() + " ");
+                        });
+                        System.out.println(" ");
+                });
 
-        MermaidUtils.writeSupertypeGraph(supertypes, "signTypes");
+                MermaidUtils.writeSupertypeGraph(supertypes, "signTypes");
 
-        System.out.println( "Create generic sign and pattern data objects." );
-        final MagmaCoreService signService = MagmaCoreServiceFactory.createWithJenaDatabase();
-        signService.register(PatternsUtils.PREFIX_LIST);
+                System.out.println("Create generic sign and pattern data objects.");
+                final MagmaCoreService signService = MagmaCoreServiceFactory.createWithJenaDatabase();
+                signService.register(PatternsUtils.PREFIX_LIST);
 
+                // Find existing objects that are members of
+                // "Class_of_possible_world_for_abstract_pattern_examples"
+                final PossibleWorld possibleWorldForGenericExamples = (PossibleWorld) QueryUtils
+                                .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples");
+                final ClassOfEvent classOfEventForGenericExamples = (ClassOfEvent) QueryUtils
+                                .findThingInServiceByName(mcDatasets, "ClassOfEvent_ExampleEvents");
 
-        // Find existing objects that are members of "Class_of_possible_world_for_abstract_pattern_examples"
-        final PossibleWorld possibleWorldForGenericExamples = (PossibleWorld)
-            QueryUtils.findThingInServiceByName( mcDatasets, "Possible_World_for_generic_pattern_examples");
-        final ClassOfEvent classOfEventForGenericExamples = (ClassOfEvent)
-            QueryUtils.findThingInServiceByName( mcDatasets, "ClassOfEvent_ExampleEvents");
-        
-        // Thing being represented
-        final Individual thingBeingRepresented = (Individual)
-                QueryUtils.findThingInServiceByName( mcDatasets, "Example_individual_X");
-        
-        // Pattern
-        final Pattern genericPattern = 
-                new PatternBuilder(new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
-                        .build();
-         PatternsUtils.addBasePropertiesToThing( genericPattern, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_REF_BASE, 
-                        "P@773rN",                                      // This string is the example pattern.
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(), 
-                        "HqdmPatternProject_User1"));
-        genericPattern.addStringValue(PatternsUtils.COMMENT, "This_is_an_example_pattern_held_as_the_data_EntityName");
+                // Thing being represented
+                final Individual thingBeingRepresented = (Individual) QueryUtils.findThingInServiceByName(mcDatasets,
+                                "Example_individual_X");
 
-        final Role exampleRLCRole = 
-                new RoleBuilder( new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()) ).build();
-        PatternsUtils.addBasePropertiesToThing( exampleRLCRole, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_REF_BASE, 
-                        "Kind_of_recognizing_language_community_for_sign_examples", 
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(), 
-                        "HqdmPatternProject_User1"));
-        
-        // Events
-        final Event ts1 = new EventBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
-                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
-                .member_Of(classOfEventForGenericExamples)
-                .build();
-        PatternsUtils.addBasePropertiesToThing(ts1, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_BASE,
-                        "ts1",
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                // Pattern
+                final Pattern genericPattern = new PatternBuilder(new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(genericPattern,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                "P@773rN", // This string is the example pattern.
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
+                genericPattern.addStringValue(PatternsUtils.COMMENT,
+                                "This_is_an_example_pattern_held_as_the_data_EntityName");
 
-        final Event ts2 = new EventBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
-                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
-                .member_Of(classOfEventForGenericExamples)
-                .build();
-        PatternsUtils.addBasePropertiesToThing(ts2, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_BASE,
-                        "ts2",
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        
-        // Recognizing language community
-        final RecognizingLanguageCommunity exampleRecognizingLanguageCommunity = 
-                new RecognizingLanguageCommunityBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
-                        .part_Of_Possible_World_M(possibleWorldForGenericExamples)
-                        .member_Of_Kind_M( exampleRLCRole )
-                        .beginning(ts1)
-                        .ending(ts2)
-                        .build();
-        PatternsUtils.addBasePropertiesToThing(exampleRecognizingLanguageCommunity, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_BASE,
-                        "Example_RecognizingLanguageCommunity",
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                final Role exampleRLCRole = new RoleBuilder(new IRI(PatternsUtils.PATTERNS_REF_BASE, uid())).build();
+                PatternsUtils.addBasePropertiesToThing(exampleRLCRole,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                "Kind_of_recognizing_language_community_for_sign_examples",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        // Representation by pattern
-        final RepresentationByPattern exampleRepresentationByPattern =
-                new RepresentationByPatternBuilder( new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()) )
-                        .consists_Of_By_Class_M(genericPattern)
-                        .consists_Of_In_Members_M(exampleRecognizingLanguageCommunity)
-                        .represented_M(thingBeingRepresented)
-                        .build();
-        PatternsUtils.addBasePropertiesToThing( exampleRepresentationByPattern, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_REF_BASE, 
-                        "Representation_by_pattern_class_for_sign_examples", 
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(), 
-                        "HqdmPatternProject_User1"));
+                // Events
+                final Event ts1 = new EventBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
+                                .member_Of(classOfEventForGenericExamples)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(ts1,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_BASE,
+                                                "ts1",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        // Representation by sign
-        final KindOfAssociation exampleKindOfRepresentationBySign =
-                new KindOfAssociationBuilder(new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()) )
-                        .build();
-        PatternsUtils.addBasePropertiesToThing( exampleKindOfRepresentationBySign, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_REF_BASE, 
-                        "KindOfAssociation_Kind_of_representation_by_sign_class_for_sign_examples", 
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(), 
-                        "HqdmPatternProject_User1"));
+                final Event ts2 = new EventBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
+                                .member_Of(classOfEventForGenericExamples)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(ts2,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_BASE,
+                                                "ts2",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        final RepresentationBySign exampleRepresentationBySign = 
-                new RepresentationBySignBuilder( new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()) )
-                        .part_Of_Possible_World_M(possibleWorldForGenericExamples)
-                        .member_Of_Kind_M(exampleKindOfRepresentationBySign)
-                        .member_Of__M(exampleRepresentationByPattern)
-                        .represents_M(thingBeingRepresented)
-                        .consists_Of_Participant(exampleRecognizingLanguageCommunity)
-                        .beginning(ts1)
-                        .ending(ts1)
-                        .build();
-         PatternsUtils.addBasePropertiesToThing(exampleRepresentationBySign, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_BASE,
-                        "Example_RepresentationBySign",
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                // Recognizing language community
+                final RecognizingLanguageCommunity exampleRecognizingLanguageCommunity = new RecognizingLanguageCommunityBuilder(
+                                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
+                                .member_Of_Kind_M(exampleRLCRole)
+                                .beginning(ts1)
+                                .ending(ts2)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(exampleRecognizingLanguageCommunity,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_BASE,
+                                                "Example_RecognizingLanguageCommunity",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        // Sign
-        final Sign exampleSign = new SignBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
-                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
-                .member_Of__M(genericPattern)
-                .beginning(ts1)
-                .ending(ts2)
-                .participant_In_M(exampleRepresentationBySign)
-                .build();
-        PatternsUtils.addBasePropertiesToThing(exampleSign, 
-                new HqdmObjectBaseProperties(
-                        PatternsUtils.PATTERNS_BASE,
-                        "Example_Sign",
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                // Representation by pattern
+                final RepresentationByPattern exampleRepresentationByPattern = new RepresentationByPatternBuilder(
+                                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                                .consists_Of_By_Class_M(genericPattern)
+                                .consists_Of_In_Members_M(exampleRecognizingLanguageCommunity)
+                                .represented_M(thingBeingRepresented)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(exampleRepresentationByPattern,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                "Representation_by_pattern_class_for_sign_examples",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        exampleRepresentationBySign.addValue(HQDM.CONSISTS_OF_PARTICIPANT, exampleSign.getId());
+                // Representation by sign
+                final KindOfAssociation exampleKindOfRepresentationBySign = new KindOfAssociationBuilder(
+                                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(exampleKindOfRepresentationBySign,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                "KindOfAssociation_Kind_of_representation_by_sign_class_for_sign_examples",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-   
-        // Commit to sign MagmaCore service
-        final DbTransformation signChangeSet = signService.createDbTransformation(
-            List.of(
-                genericPattern,
-                exampleRLCRole,
-                ts1,
-                ts2,
-                exampleRecognizingLanguageCommunity,
-                exampleRepresentationByPattern,
-                exampleRepresentationBySign,
-                exampleSign,
-                exampleKindOfRepresentationBySign
-                ));
-        signService.runInTransaction(signChangeSet);
+                final RepresentationBySign exampleRepresentationBySign = new RepresentationBySignBuilder(
+                                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
+                                .member_Of_Kind_M(exampleKindOfRepresentationBySign)
+                                .member_Of__M(exampleRepresentationByPattern)
+                                .represents_M(thingBeingRepresented)
+                                .consists_Of_Participant(exampleRecognizingLanguageCommunity)
+                                .beginning(ts1)
+                                .ending(ts2)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(exampleRepresentationBySign,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_BASE,
+                                                "Example_RepresentationBySign",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        // Output files
-        // Create node-edge graphs for the sign page
-        MermaidUtils.writeLRNodeEdgeGraph(
-                List.of(exampleRepresentationBySign, 
-                        exampleSign, 
-                        exampleRecognizingLanguageCommunity, 
-                        thingBeingRepresented ), 
-                List.of("record_created", "record_creator", "comment"), 
-                List.of(exampleRepresentationBySign.getId().split("#")[1], 
-                        thingBeingRepresented.getId().split("#")[1]),
-                "genericRepresentationBySignAndParticipants");
+                // Sign
+                final Sign exampleSign = new SignBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                                .part_Of_Possible_World_M(possibleWorldForGenericExamples)
+                                .member_Of__M(genericPattern)
+                                .beginning(ts1)
+                                .ending(ts2)
+                                .participant_In_M(exampleRepresentationBySign)
+                                .build();
+                PatternsUtils.addBasePropertiesToThing(exampleSign,
+                                new HqdmObjectBaseProperties(
+                                                PatternsUtils.PATTERNS_BASE,
+                                                "Example_Sign",
+                                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                                "HqdmPatternProject_User1"));
 
-        MermaidUtils.writeLRNodeEdgeGraph(
-                List.of(genericPattern,
-                        exampleRLCRole,
-                        ts1,
-                        ts2,
-                        exampleRecognizingLanguageCommunity,
-                        exampleRepresentationByPattern,
-                        exampleRepresentationBySign,
-                        exampleSign,
-                        exampleKindOfRepresentationBySign
-                        ), 
-                List.of("record_created", "record_creator", "comment"), 
-                List.of(exampleRepresentationBySign.getId().split("#")[1], 
-                        exampleSign.getId().split("#")[1], 
-                        exampleRecognizingLanguageCommunity.getId().split("#")[1], 
-                        thingBeingRepresented.getId().split("#")[1]),
-                "genericAssociationAndParticipantsFull");
+                exampleRepresentationBySign.addValue(HQDM.CONSISTS_OF_PARTICIPANT, exampleSign.getId());
 
-        try {
-            final PrintStream ttl_stream_out = new PrintStream("example-files/representationBySignGenericPattern.ttl");
-            final PrintStream stmt_stream_out = new PrintStream("example-files/representationBySignGenericPattern.stmt");
+                // Commit to sign MagmaCore service
+                final DbTransformation signChangeSet = signService.createDbTransformation(
+                                List.of(
+                                                genericPattern,
+                                                exampleRLCRole,
+                                                ts1,
+                                                ts2,
+                                                exampleRecognizingLanguageCommunity,
+                                                exampleRepresentationByPattern,
+                                                exampleRepresentationBySign,
+                                                exampleSign,
+                                                exampleKindOfRepresentationBySign));
+                signService.runInTransaction(signChangeSet);
 
-            signService.exportTtl(ttl_stream_out);
-            ttl_stream_out.close();
-            System.out.println("\tData being generated as TTL in example-files/representationBySignGenericPattern.ttl.");
+                // Output files
+                // Create node-edge graphs for the sign page
+                MermaidUtils.writeLRNodeEdgeGraph(
+                                List.of(exampleRepresentationBySign,
+                                                exampleSign,
+                                                exampleRecognizingLanguageCommunity,
+                                                thingBeingRepresented),
+                                List.of("record_created", "record_creator", "comment"),
+                                List.of(exampleRepresentationBySign.getId().split("#")[1],
+                                                thingBeingRepresented.getId().split("#")[1]),
+                                "genericRepresentationBySignAndParticipants");
 
-            signService.exportStatements(stmt_stream_out);
-            stmt_stream_out.close();
-            System.out.println("\tData generated as statements in example-files/representationBySignGenericPattern.stmt.");
+                MermaidUtils.writeLRNodeEdgeGraph(
+                                List.of(genericPattern,
+                                                exampleRLCRole,
+                                                ts1,
+                                                ts2,
+                                                exampleRecognizingLanguageCommunity,
+                                                exampleRepresentationByPattern,
+                                                exampleRepresentationBySign,
+                                                exampleSign,
+                                                exampleKindOfRepresentationBySign),
+                                List.of("record_created", "record_creator", "comment"),
+                                List.of(exampleRepresentationBySign.getId().split("#")[1],
+                                                exampleSign.getId().split("#")[1],
+                                                exampleRecognizingLanguageCommunity.getId().split("#")[1],
+                                                thingBeingRepresented.getId().split("#")[1]),
+                                "genericRepresentationBySignAndParticipantsFull");
 
-        } catch (FileNotFoundException e) {
-            System.err.println("representationBySignGenericPattern example write: " + e);
-        } 
+                try {
+                        final PrintStream ttl_stream_out = new PrintStream(
+                                        "example-files/representationBySignGenericPattern.ttl");
+                        final PrintStream stmt_stream_out = new PrintStream(
+                                        "example-files/representationBySignGenericPattern.stmt");
 
-        mcDatasets.add(signService);
+                        signService.exportTtl(ttl_stream_out);
+                        ttl_stream_out.close();
+                        System.out.println(
+                                        "\tData being generated as TTL in example-files/representationBySignGenericPattern.ttl.");
 
-    }
+                        signService.exportStatements(stmt_stream_out);
+                        stmt_stream_out.close();
+                        System.out.println(
+                                        "\tData generated as statements in example-files/representationBySignGenericPattern.stmt.");
+
+                } catch (FileNotFoundException e) {
+                        System.err.println("representationBySignGenericPattern example write: " + e);
+                }
+
+                mcDatasets.add(signService);
+
+        }
 }
