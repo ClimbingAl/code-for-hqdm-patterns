@@ -22,4 +22,4 @@ Installation:
 
 To run the java app(s):
   - You may need to set the Maven executable Path in Vscode to: /home/vscode/maven/apache-maven-3.9.5/bin/mvn
-  - Run the `AircraftExampleApp.java`.  If successful the file(s) in the output-files directory should be re-created.
+  - Run the `ExamplesApp.java`.  If successful the file(s) in the output-files directory should be re-created.
