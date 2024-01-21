@@ -13,6 +13,7 @@ import patterns.hqdm.utils.PatternsUtils;
 import patterns.hqdm.utils.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -71,7 +72,7 @@ public class AssociationEagleExample {
                                                 "HqdmPatternProject_User1"));
                 classOfStateOfPersonObject.addStringValue(PatternsUtils.COMMENT,
                                 "Class_of_state_of_person_as_a_referenceable_data_object.");
-                classOfStateOfPersonObject.addValue(HQDM.PART__OF_BY_CLASS, personKindObject.getId());
+                classOfStateOfPersonObject.addValue(HQDM.PART__OF_BY_CLASS, new IRI(personKindObject.getId()));
 
                 // Get the necessary LM-5 data objects from the database
 
@@ -82,7 +83,7 @@ public class AssociationEagleExample {
                 final List<Thing> apolloPossibleWorldThings = QueryUtils.findThingsInServiceByPredicateAndValue(
                                 mcDatasets,
                                 HQDM.PART_OF_POSSIBLE_WORLD,
-                                possibleWorldForEagleExamples.getId());
+                                new IRI(possibleWorldForEagleExamples.getId()));
 
                 final Thing kindOfCrewInLanderAssociationObject = PatternsUtils
                                 .createNewBaseObject(new HqdmObjectBaseProperties(
@@ -102,12 +103,12 @@ public class AssociationEagleExample {
                                 "HqdmPatternProject_User1"));
                 roleOfLunarLanderObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_Lunar_Lander_Module_in_association_as_occupied_by_its_human_crew.");
-                roleOfLunarLanderObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfCrewInLanderAssociationObject.getId());
+                roleOfLunarLanderObject.addValue(HQDM.PART_OF_BY_CLASS_, new IRI(kindOfCrewInLanderAssociationObject.getId()));
                 roleOfLunarLanderObject
                                 .addValue(HQDM.HAS_SUPERCLASS,
-                                                QueryUtils.findThingInServiceByName(mcDatasets,
-                                                                "ClassOfStateOfFunctionalObject__State_Of_Lunar_Lander")
-                                                                .getId());
+                                        new IRI(QueryUtils.findThingInServiceByName(mcDatasets,
+                                                                "ClassOfStateOfFunctionalSystem__State_Of_Lunar_Lander")
+                                                                .getId()));
 
                 final Thing roleOfLunarLanderCrewObject = PatternsUtils
                                 .createNewBaseObject(new HqdmObjectBaseProperties(
@@ -119,14 +120,14 @@ public class AssociationEagleExample {
                 roleOfLunarLanderCrewObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_Person_as_crew_in_association_as_occupier_of_Lunar_Lander_Module.");
                 roleOfLunarLanderCrewObject.addValue(HQDM.PART_OF_BY_CLASS_,
-                                kindOfCrewInLanderAssociationObject.getId());
-                roleOfLunarLanderCrewObject.addValue(HQDM.HAS_SUPERCLASS, classOfStateOfPersonObject.getId());
+                                new IRI(kindOfCrewInLanderAssociationObject.getId()));
+                roleOfLunarLanderCrewObject.addValue(HQDM.HAS_SUPERCLASS, new IRI(classOfStateOfPersonObject.getId()));
 
                 // Now add these classes to the kindOfGenericAssociation
                 kindOfCrewInLanderAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS,
-                                roleOfLunarLanderObject.getId());
+                                new IRI(roleOfLunarLanderObject.getId()));
                 kindOfCrewInLanderAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS,
-                                roleOfLunarLanderCrewObject.getId());
+                                new IRI(roleOfLunarLanderCrewObject.getId()));
 
                 // Get/generate events from Buzz entering LM5 to Exiting to Lunar surface
                 // Create the start and end events for the lander on the moon
@@ -141,9 +142,9 @@ public class AssociationEagleExample {
                                                                 ZoneOffset.UTC).toString(),
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                buzzEnteredLM5EventObject.addValue(HQDM.MEMBER_OF, QueryUtils
-                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId());
-                buzzEnteredLM5EventObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+                buzzEnteredLM5EventObject.addValue(HQDM.MEMBER_OF, new IRI(QueryUtils
+                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId()));
+                buzzEnteredLM5EventObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
 
                 final Thing buzzExitedLM5EventObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -153,9 +154,9 @@ public class AssociationEagleExample {
                                                                 .toString(),
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                buzzExitedLM5EventObject.addValue(HQDM.MEMBER_OF, QueryUtils
-                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId());
-                buzzExitedLM5EventObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+                buzzExitedLM5EventObject.addValue(HQDM.MEMBER_OF, new IRI(QueryUtils
+                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId()));
+                buzzExitedLM5EventObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
 
                 // Now generate the three states that form the generic association between a
                 // state of X and a state of a new individual Y
@@ -168,19 +169,19 @@ public class AssociationEagleExample {
                                                 "Example_participant_state_of_Eagle_Lunar_Lander_in_descent",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                participantStateOfLunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, roleOfLunarLanderObject.getId());
+                participantStateOfLunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfLunarLanderObject.getId()));
                 participantStateOfLunarLanderObject.addValue(HQDM.MEMBER_OF,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId());
-                participantStateOfLunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, QueryUtils
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId()));
+                participantStateOfLunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(QueryUtils
                                 .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples")
-                                .getId());
-                participantStateOfLunarLanderObject.addValue(HQDM.BEGINNING, buzzEnteredLM5EventObject.getId());
-                participantStateOfLunarLanderObject.addValue(HQDM.ENDING, buzzExitedLM5EventObject.getId());
+                                .getId()));
+                participantStateOfLunarLanderObject.addValue(HQDM.BEGINNING, new IRI(buzzEnteredLM5EventObject.getId()));
+                participantStateOfLunarLanderObject.addValue(HQDM.ENDING, new IRI(buzzExitedLM5EventObject.getId()));
                 participantStateOfLunarLanderObject
                                 .addValue(HQDM.TEMPORAL_PART_OF,
-                                                QueryUtils.findThingByNameInList(apolloPossibleWorldThings,
+                                        new IRI(QueryUtils.findThingByNameInList(apolloPossibleWorldThings,
                                                                 "Example_individual_that_is_Lunar_Module_Eagle_LM-5")
-                                                                .getId());
+                                                                .getId()));
 
                 final Thing buzzAldrinObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -189,8 +190,8 @@ public class AssociationEagleExample {
                                                 "Buzz_Aldrin",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                buzzAldrinObject.addValue(HQDM.MEMBER_OF_KIND, personKindObject.getId());
-                buzzAldrinObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+                buzzAldrinObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(personKindObject.getId()));
+                buzzAldrinObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
 
                 // Create the state of X that is participant in this Association example
                 final Thing participantStateOfBuzzAldrinObject = PatternsUtils.createNewBaseObject(
@@ -200,13 +201,13 @@ public class AssociationEagleExample {
                                                 "Example_participant_state_of_Buzz_Aldrin_in_LM5",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                participantStateOfBuzzAldrinObject.addValue(HQDM.MEMBER_OF_KIND, roleOfLunarLanderCrewObject.getId());
-                participantStateOfBuzzAldrinObject.addValue(HQDM.MEMBER_OF, classOfStateOfPersonObject.getId());
+                participantStateOfBuzzAldrinObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfLunarLanderCrewObject.getId()));
+                participantStateOfBuzzAldrinObject.addValue(HQDM.MEMBER_OF, new IRI(classOfStateOfPersonObject.getId()));
                 participantStateOfBuzzAldrinObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD,
-                                possibleWorldForEagleExamples.getId());
-                participantStateOfBuzzAldrinObject.addValue(HQDM.BEGINNING, buzzEnteredLM5EventObject.getId());
-                participantStateOfBuzzAldrinObject.addValue(HQDM.ENDING, buzzExitedLM5EventObject.getId());
-                participantStateOfBuzzAldrinObject.addValue(HQDM.TEMPORAL_PART_OF, buzzAldrinObject.getId());
+                                new IRI(possibleWorldForEagleExamples.getId()));
+                participantStateOfBuzzAldrinObject.addValue(HQDM.BEGINNING, new IRI(buzzEnteredLM5EventObject.getId()));
+                participantStateOfBuzzAldrinObject.addValue(HQDM.ENDING, new IRI(buzzExitedLM5EventObject.getId()));
+                participantStateOfBuzzAldrinObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(buzzAldrinObject.getId()));
 
                 // Now make Association
                 final Thing associationBuzzInLM5Object = PatternsUtils.createNewBaseObject(
@@ -216,17 +217,17 @@ public class AssociationEagleExample {
                                                 "Association_of_Buzz_in_LM5_during_descent",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                associationBuzzInLM5Object.addValue(HQDM.MEMBER_OF_KIND, kindOfCrewInLanderAssociationObject.getId());
-                associationBuzzInLM5Object.addValue(HQDM.BEGINNING, buzzEnteredLM5EventObject.getId());
-                associationBuzzInLM5Object.addValue(HQDM.ENDING, buzzExitedLM5EventObject.getId());
-                associationBuzzInLM5Object.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+                associationBuzzInLM5Object.addValue(HQDM.MEMBER_OF_KIND, new IRI(kindOfCrewInLanderAssociationObject.getId()));
+                associationBuzzInLM5Object.addValue(HQDM.BEGINNING, new IRI(buzzEnteredLM5EventObject.getId()));
+                associationBuzzInLM5Object.addValue(HQDM.ENDING, new IRI(buzzExitedLM5EventObject.getId()));
+                associationBuzzInLM5Object.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
                 associationBuzzInLM5Object.addValue(HQDM.CONSISTS_OF_PARTICIPANT,
-                                participantStateOfBuzzAldrinObject.getId());
+                                new IRI(participantStateOfBuzzAldrinObject.getId()));
                 associationBuzzInLM5Object.addValue(HQDM.CONSISTS_OF_PARTICIPANT,
-                                participantStateOfLunarLanderObject.getId());
+                                new IRI(participantStateOfLunarLanderObject.getId()));
 
-                participantStateOfBuzzAldrinObject.addValue(HQDM.PARTICIPANT_IN, associationBuzzInLM5Object.getId());
-                participantStateOfLunarLanderObject.addValue(HQDM.PARTICIPANT_IN, associationBuzzInLM5Object.getId());
+                participantStateOfBuzzAldrinObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationBuzzInLM5Object.getId()));
+                participantStateOfLunarLanderObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationBuzzInLM5Object.getId()));
 
                 final DbTransformation associationChangeSet = associationService.createDbTransformation(
                                 List.of(

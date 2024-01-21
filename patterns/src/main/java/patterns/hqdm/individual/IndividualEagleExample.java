@@ -13,6 +13,7 @@ import patterns.hqdm.utils.MermaidUtils;
 import patterns.hqdm.utils.PatternsUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -51,24 +52,24 @@ public class IndividualEagleExample {
                 // It needs a class (SET) to be a member_of_kind of
                 final Thing lunarLanderKindObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
-                                                HQDM.KIND_OF_FUNCTIONAL_OBJECT,
+                                                HQDM.KIND_OF_FUNCTIONAL_SYSTEM,
                                                 PatternsUtils.PATTERNS_REF_BASE,
-                                                "KindOfFunctionalObject__Lunar_Lander",
+                                                "KindOfFunctionalSystem__Lunar_Lander",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
                 lunarLanderKindObject.addStringValue(PatternsUtils.COMMENT,
-                                "Kind_of_functional_object_that_is_Lunar_Lander");
+                                "Kind_of_functional_system_that_is_Lunar_Lander._Note_this_is_subclass_of_class_of_ordinary_functional_object.");
 
                 final Thing lunarLanderClassOfStateObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
-                                                HQDM.CLASS_OF_STATE_OF_FUNCTIONAL_OBJECT,
+                                                HQDM.CLASS_OF_STATE_OF_FUNCTIONAL_SYSTEM,
                                                 PatternsUtils.PATTERNS_REF_BASE,
-                                                "ClassOfStateOfFunctionalObject__State_Of_Lunar_Lander",
+                                                "ClassOfStateOfFunctionalSystem__State_Of_Lunar_Lander",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
                 lunarLanderClassOfStateObject.addStringValue(PatternsUtils.COMMENT,
-                                "Class_of_state_of_functional_object_that_is_temporal_part_of_Lunar_Lander");
-                lunarLanderClassOfStateObject.addValue(HQDM.PART__OF_BY_CLASS, lunarLanderKindObject.getId());
+                                "Class_of_state_of_functional_system_that_is_temporal_part_of_Lunar_Lander");
+                lunarLanderClassOfStateObject.addValue(HQDM.PART__OF_BY_CLASS, new IRI(lunarLanderKindObject.getId()));
 
                 // The events need a class_of_point_in_time to be members of
                 final Thing classOfPointInTimeObject = PatternsUtils.createNewBaseObject(
@@ -81,7 +82,7 @@ public class IndividualEagleExample {
                 classOfPointInTimeObject.addStringValue(PatternsUtils.COMMENT,
                                 "Class_of_point_in_time_for_events_in_ISO_8601-1:2019_date-time_format");
 
-                // The events need a class_of_point_in_time to be members of
+                // Class of possible world for the possible worlds used in the Eagle examples
                 final Thing classOfPossibleWorldObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
                                                 HQDM.CLASS_OF_POSSIBLE_WORLD,
@@ -100,18 +101,18 @@ public class IndividualEagleExample {
                                                 "Possible_world_for_Apollo_pattern_examples",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfPossibleWorldObject.getId());
+                possibleWorldObject.addValue(HQDM.MEMBER_OF, new IRI(classOfPossibleWorldObject.getId()));
 
                 // Create the LM-5 lander object
                 final Thing lunarLanderObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
-                                                HQDM.FUNCTIONAL_OBJECT,
+                                                HQDM.FUNCTIONAL_SYSTEM,
                                                 PatternsUtils.PATTERNS_BASE,
                                                 "Example_individual_that_is_Lunar_Module_Eagle_LM-5",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                lunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, lunarLanderKindObject.getId());
-                lunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                lunarLanderObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(lunarLanderKindObject.getId()));
+                lunarLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
                 // No beginning or ending as these are not known BUT a temporal part is known,
                 // the Eagle landing on the Moon
 
@@ -127,8 +128,8 @@ public class IndividualEagleExample {
                                                                 .toString(),
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                eagleMoonLandedBeginningObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-                eagleMoonLandedBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                eagleMoonLandedBeginningObject.addValue(HQDM.MEMBER_OF, new IRI(classOfPointInTimeObject.getId()));
+                eagleMoonLandedBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 final Thing eagleMoonLandedEndingObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -138,24 +139,24 @@ public class IndividualEagleExample {
                                                                 .toString(),
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                eagleMoonLandedEndingObject.addValue(HQDM.MEMBER_OF, classOfPointInTimeObject.getId());
-                eagleMoonLandedEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                eagleMoonLandedEndingObject.addValue(HQDM.MEMBER_OF, new IRI(classOfPointInTimeObject.getId()));
+                eagleMoonLandedEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 // Create the state of LM-5 lander object while on the lunar surface
                 final Thing stateOfLanderObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
-                                                HQDM.STATE_OF_FUNCTIONAL_OBJECT,
+                                                HQDM.STATE_OF_FUNCTIONAL_SYSTEM,
                                                 PatternsUtils.PATTERNS_BASE,
                                                 "Example_state_of_Lunar_Lander_Module_Eagle_LM-5",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfLanderObject.addValue(HQDM.MEMBER_OF, lunarLanderClassOfStateObject.getId());
-                stateOfLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-                stateOfLanderObject.addValue(HQDM.BEGINNING, eagleMoonLandedBeginningObject.getId());
-                stateOfLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
-                stateOfLanderObject.addValue(HQDM.TEMPORAL_PART_OF, lunarLanderObject.getId());
+                stateOfLanderObject.addValue(HQDM.MEMBER_OF, new IRI(lunarLanderClassOfStateObject.getId()));
+                stateOfLanderObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                stateOfLanderObject.addValue(HQDM.BEGINNING, new IRI(eagleMoonLandedBeginningObject.getId()));
+                stateOfLanderObject.addValue(HQDM.ENDING, new IRI(eagleMoonLandedEndingObject.getId()));
+                stateOfLanderObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(lunarLanderObject.getId()));
 
-                lunarLanderObject.addValue(HQDM.ENDING, eagleMoonLandedEndingObject.getId());
+                lunarLanderObject.addValue(HQDM.ENDING, new IRI(eagleMoonLandedEndingObject.getId()));
 
                 // Commit to MC database
                 final DbTransformation individualChangeSet = individualService.createDbTransformation(

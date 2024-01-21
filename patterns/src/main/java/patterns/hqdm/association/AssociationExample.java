@@ -12,6 +12,7 @@ import patterns.hqdm.utils.PatternsUtils;
 import patterns.hqdm.utils.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -51,7 +52,7 @@ public class AssociationExample {
                 final List<Thing> genericPossibleWorldThings = QueryUtils.findThingsInServiceByPredicateAndValue(
                                 mcDatasets,
                                 HQDM.PART_OF_POSSIBLE_WORLD,
-                                possibleWorldForGenericExamples.getId());
+                                new IRI(possibleWorldForGenericExamples.getId()));
 
                 // Create new reference data classes
                 // Kind_of_association, Roles, Participants
@@ -74,7 +75,7 @@ public class AssociationExample {
                                 "HqdmPatternProject_User1"));
                 roleOfXThingObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_X_in_a_kind_of_association_for_generic_pattern_examples");
-                roleOfXThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericAssociationObject.getId());
+                roleOfXThingObject.addValue(HQDM.PART_OF_BY_CLASS_, new IRI(kindOfGenericAssociationObject.getId()));
 
                 final Thing roleOfYThingObject = PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
                                 HQDM.ROLE,
@@ -84,11 +85,11 @@ public class AssociationExample {
                                 "HqdmPatternProject_User1"));
                 roleOfYThingObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_Y_in_a_kind_of_association_for_generic_pattern_examples");
-                roleOfYThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericAssociationObject.getId());
+                roleOfYThingObject.addValue(HQDM.PART_OF_BY_CLASS_, new IRI(kindOfGenericAssociationObject.getId()));
 
                 // Now add these classes to the kindOfGenericAssociation
-                kindOfGenericAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, roleOfXThingObject.getId());
-                kindOfGenericAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, roleOfYThingObject.getId());
+                kindOfGenericAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, new IRI(roleOfXThingObject.getId()));
+                kindOfGenericAssociationObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, new IRI(roleOfYThingObject.getId()));
 
                 final Thing individualKindOfYObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -118,18 +119,18 @@ public class AssociationExample {
                                                 "Example_participant_state_of_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfXParticipantObject.addValue(HQDM.MEMBER_OF_KIND, roleOfXThingObject.getId());
+                stateOfXParticipantObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfXThingObject.getId()));
                 stateOfXParticipantObject.addValue(HQDM.MEMBER_OF,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId());
-                stateOfXParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, QueryUtils
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId()));
+                stateOfXParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(QueryUtils
                                 .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples")
-                                .getId());
+                                .getId()));
                 stateOfXParticipantObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 stateOfXParticipantObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
-                stateOfXParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, QueryUtils
-                                .findThingByNameInList(genericPossibleWorldThings, "Example_individual_X").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
+                stateOfXParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(QueryUtils
+                                .findThingByNameInList(genericPossibleWorldThings, "Example_individual_X").getId()));
 
                 final Thing individualYObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -138,13 +139,13 @@ public class AssociationExample {
                                                 "Example_individual_Y",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                individualYObject.addValue(HQDM.MEMBER_OF_KIND, individualKindOfYObject.getId());
-                individualYObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, QueryUtils
+                individualYObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(individualKindOfYObject.getId()));
+                individualYObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(QueryUtils
                                 .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples")
-                                .getId());
+                                .getId()));
                 individualYObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t0").getId());
-                individualYObject.addValue(HQDM.ENDING, QueryUtils.findThingInServiceByName(mcDatasets, "t3").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t0").getId()));
+                individualYObject.addValue(HQDM.ENDING, new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t3").getId()));
 
                 // Create the state of X that is participant in this Association example
                 final Thing stateOfYParticipantObject = PatternsUtils.createNewBaseObject(
@@ -154,16 +155,16 @@ public class AssociationExample {
                                                 "Example_participant_state_of_Y",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfYParticipantObject.addValue(HQDM.MEMBER_OF_KIND, roleOfYThingObject.getId());
-                stateOfYParticipantObject.addValue(HQDM.MEMBER_OF, classOfStateOfYObject.getId());
-                stateOfYParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, QueryUtils
+                stateOfYParticipantObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfYThingObject.getId()));
+                stateOfYParticipantObject.addValue(HQDM.MEMBER_OF, new IRI(classOfStateOfYObject.getId()));
+                stateOfYParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(QueryUtils
                                 .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples")
-                                .getId());
+                                .getId()));
                 stateOfYParticipantObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 stateOfYParticipantObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
-                stateOfYParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, individualYObject.getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
+                stateOfYParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(individualYObject.getId()));
 
                 // Now make Association
                 final Thing associationXYObject = PatternsUtils.createNewBaseObject(
@@ -173,19 +174,19 @@ public class AssociationExample {
                                                 "Example_association_between_X_and_Y",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                associationXYObject.addValue(HQDM.MEMBER_OF_KIND, kindOfGenericAssociationObject.getId());
+                associationXYObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(kindOfGenericAssociationObject.getId()));
                 associationXYObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 associationXYObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
-                associationXYObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, QueryUtils
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
+                associationXYObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(QueryUtils
                                 .findThingInServiceByName(mcDatasets, "Possible_World_for_generic_pattern_examples")
-                                .getId());
-                associationXYObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, stateOfXParticipantObject.getId());
-                associationXYObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, stateOfYParticipantObject.getId());
+                                .getId()));
+                associationXYObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, new IRI(stateOfXParticipantObject.getId()));
+                associationXYObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, new IRI(stateOfYParticipantObject.getId()));
 
-                stateOfXParticipantObject.addValue(HQDM.PARTICIPANT_IN, associationXYObject.getId());
-                stateOfYParticipantObject.addValue(HQDM.PARTICIPANT_IN, associationXYObject.getId());
+                stateOfXParticipantObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationXYObject.getId()));
+                stateOfYParticipantObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationXYObject.getId()));
 
                 final DbTransformation associationChangeSet = associationService.createDbTransformation(
                                 List.of(

@@ -36,7 +36,7 @@ public class QueryUtils {
      *
      * @param mcDatasets List of MagmaCore services.
      * @param predicate  HQDM predicate.
-     * @param value      Name of thing to search for.
+     * @param value      IRI of thing to search for.
      */
     public static List<Thing> findThingsInServiceByPredicateAndValue(
             final List<MagmaCoreService> mcDatasets,

@@ -2,13 +2,24 @@ package patterns.hqdm.utils;
 
 import static uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS.RDF_TYPE;
 import static uk.gov.gchq.magmacore.util.UID.uid;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
+
+import org.apache.jena.sparql.function.library.date;
+
+import uk.gov.gchq.magmacore.hqdm.model.ClassOfPointInTime;
+import uk.gov.gchq.magmacore.hqdm.model.PointInTime;
+import uk.gov.gchq.magmacore.hqdm.model.PossibleWorld;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.HqdmObjectFactory;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HqdmIri;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IriBase;
+import uk.gov.gchq.magmacore.hqdm.rdfbuilders.PointInTimeBuilder;
 
 public class PatternsUtils {
 
@@ -140,4 +151,35 @@ public class PatternsUtils {
 
     }
 
+
+     /**
+     * Create point in time event based on supplied properties.
+     *
+     * @param dateTime              XML dateTime to add properties to.
+     * @param classOfPointInTime    {@link ClassOfPointInTime}.
+     * @param possibleWorld         {@link PossibleWorld}.
+     * @param recordCreator         Name of user creating record.
+     */
+    public static PointInTime createPointInTime(final String dateTime,
+        final ClassOfPointInTime classOfPointInTime,
+        final PossibleWorld possibleWorld,
+        final String recordCreator
+        ) {
+
+            final ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
+
+            final PointInTime pointInTime = new PointInTimeBuilder(
+                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                .part_Of_Possible_World_M(possibleWorld)
+                .member_Of(classOfPointInTime)
+                .build();
+
+            PatternsUtils.addBasePropertiesToThing(pointInTime,
+                new HqdmObjectBaseProperties(
+                        LocalDateTime.ofInstant(zonedDateTime.toInstant(), ZoneOffset.UTC).toString(),
+                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                        recordCreator));
+            
+            return pointInTime;
+    }
 }

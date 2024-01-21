@@ -12,6 +12,7 @@ import patterns.hqdm.utils.PatternsUtils;
 import patterns.hqdm.utils.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -44,7 +45,7 @@ public class ActivityExample {
                 final List<Thing> genericPossibleWorldThings = QueryUtils.findThingsInServiceByPredicateAndValue(
                                 mcDatasets,
                                 HQDM.PART_OF_POSSIBLE_WORLD,
-                                possibleWorldForGenericExamples.getId());
+                                new IRI(possibleWorldForGenericExamples.getId()));
 
                 // Create new reference data classes
                 // Kind_of_activity, Roles, Participants
@@ -69,7 +70,7 @@ public class ActivityExample {
                                                 "HqdmPatternProject_User1"));
                 roleOfXThingObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_X_in_a_kind_of_activity_for_generic_pattern_examples");
-                roleOfXThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericActivityObject.getId());
+                roleOfXThingObject.addValue(HQDM.PART_OF_BY_CLASS_, new IRI(kindOfGenericActivityObject.getId()));
 
                 final Thing roleOfZThingObject = PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
                                 HQDM.ROLE,
@@ -79,11 +80,11 @@ public class ActivityExample {
                                 "HqdmPatternProject_User1"));
                 roleOfZThingObject.addStringValue(PatternsUtils.COMMENT,
                                 "Role_of_Z_in_a_kind_of_activity_for_generic_pattern_examples");
-                roleOfZThingObject.addValue(HQDM.PART_OF_BY_CLASS_, kindOfGenericActivityObject.getId());
+                roleOfZThingObject.addValue(HQDM.PART_OF_BY_CLASS_, new IRI(kindOfGenericActivityObject.getId()));
 
                 // Now add these classes to the kindOfGenericActivity
-                kindOfGenericActivityObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, roleOfXThingObject.getId());
-                kindOfGenericActivityObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, roleOfZThingObject.getId());
+                kindOfGenericActivityObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, new IRI(roleOfXThingObject.getId()));
+                kindOfGenericActivityObject.addValue(HQDM.CONSISTS_OF_BY_CLASS, new IRI(roleOfZThingObject.getId()));
 
                 final Thing individualKindOfZObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -113,19 +114,19 @@ public class ActivityExample {
                                                 "Example_participant_state_of_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfXParticipantObject.addValue(HQDM.MEMBER_OF_KIND, roleOfXThingObject.getId());
+                stateOfXParticipantObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfXThingObject.getId()));
                 stateOfXParticipantObject.addValue(HQDM.MEMBER_OF,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "ClassOfState_X").getId()));
                 stateOfXParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD,
-                                QueryUtils.findThingInServiceByName(mcDatasets,
-                                                "Possible_World_for_generic_pattern_examples").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets,
+                                                "Possible_World_for_generic_pattern_examples").getId()));
                 stateOfXParticipantObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 stateOfXParticipantObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
                 stateOfXParticipantObject.addValue(HQDM.TEMPORAL_PART_OF,
-                                QueryUtils.findThingByNameInList(genericPossibleWorldThings, "Example_individual_X")
-                                                .getId());
+                                new IRI(QueryUtils.findThingByNameInList(genericPossibleWorldThings, "Example_individual_X")
+                                                .getId()));
 
                 final Thing individualZObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -134,14 +135,14 @@ public class ActivityExample {
                                                 "Example_individual_Z",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                individualZObject.addValue(HQDM.MEMBER_OF_KIND, individualKindOfZObject.getId());
+                individualZObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(individualKindOfZObject.getId()));
                 individualZObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD,
-                                QueryUtils.findThingInServiceByName(mcDatasets,
-                                                "Possible_World_for_generic_pattern_examples").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets,
+                                                "Possible_World_for_generic_pattern_examples").getId()));
                 individualZObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t0").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t0").getId()));
                 individualZObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t3").getId());
+                        new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t3").getId()));
 
                 // Create the state of X that is participant in this Activity example
                 final Thing stateOfZParticipantObject = PatternsUtils.createNewBaseObject(
@@ -151,16 +152,16 @@ public class ActivityExample {
                                                 "Example_participant_state_of_Z",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfZParticipantObject.addValue(HQDM.MEMBER_OF_KIND, roleOfZThingObject.getId());
-                stateOfZParticipantObject.addValue(HQDM.MEMBER_OF, classOfStateOfZObject.getId());
+                stateOfZParticipantObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(roleOfZThingObject.getId()));
+                stateOfZParticipantObject.addValue(HQDM.MEMBER_OF, new IRI(classOfStateOfZObject.getId()));
                 stateOfZParticipantObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD,
-                                QueryUtils.findThingInServiceByName(mcDatasets,
-                                                "Possible_World_for_generic_pattern_examples").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets,
+                                                "Possible_World_for_generic_pattern_examples").getId()));
                 stateOfZParticipantObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 stateOfZParticipantObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
-                stateOfZParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, individualZObject.getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
+                stateOfZParticipantObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(individualZObject.getId()));
 
                 // Now make Activity
                 final Thing activityXZObject = PatternsUtils.createNewBaseObject(
@@ -170,19 +171,19 @@ public class ActivityExample {
                                                 "Example_activity_involving_X_and_Z",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                activityXZObject.addValue(HQDM.MEMBER_OF_KIND, kindOfGenericActivityObject.getId());
+                activityXZObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(kindOfGenericActivityObject.getId()));
                 activityXZObject.addValue(HQDM.BEGINNING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t1").getId()));
                 activityXZObject.addValue(HQDM.ENDING,
-                                QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId());
+                                new IRI(QueryUtils.findThingInServiceByName(mcDatasets, "t2").getId()));
                 activityXZObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD,
                                 QueryUtils.findThingInServiceByName(mcDatasets,
                                                 "Possible_World_for_generic_pattern_examples").getId());
-                activityXZObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, stateOfXParticipantObject.getId());
-                activityXZObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, stateOfZParticipantObject.getId());
+                activityXZObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, new IRI(stateOfXParticipantObject.getId()));
+                activityXZObject.addValue(HQDM.CONSISTS_OF_PARTICIPANT, new IRI(stateOfZParticipantObject.getId()));
 
-                stateOfXParticipantObject.addValue(HQDM.PARTICIPANT_IN, activityXZObject.getId());
-                stateOfZParticipantObject.addValue(HQDM.PARTICIPANT_IN, activityXZObject.getId());
+                stateOfXParticipantObject.addValue(HQDM.PARTICIPANT_IN, new IRI(activityXZObject.getId()));
+                stateOfZParticipantObject.addValue(HQDM.PARTICIPANT_IN, new IRI(activityXZObject.getId()));
 
                 // Caused event example
                 // The events need a class_of_point_in_time to be members of
@@ -207,8 +208,8 @@ public class ActivityExample {
                                 QueryUtils.findThingInServiceByName(
                                                 mcDatasets,
                                                 "Possible_World_for_generic_pattern_examples").getId());
-                completedEvent.addValue(HQDM.MEMBER_OF, classOfCausedEventObject.getId());
-                activityXZObject.addValue(HQDM.CAUSES, completedEvent.getId());
+                completedEvent.addValue(HQDM.MEMBER_OF, new IRI(classOfCausedEventObject.getId()));
+                activityXZObject.addValue(HQDM.CAUSES, new IRI(completedEvent.getId()));
 
                 final DbTransformation activityChangeSet = activityService.createDbTransformation(List.of(
                                 classOfStateOfZObject,

@@ -198,7 +198,7 @@ public class SignExample {
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
 
-                exampleRepresentationBySign.addValue(HQDM.CONSISTS_OF_PARTICIPANT, exampleSign.getId());
+                exampleRepresentationBySign.addValue(HQDM.CONSISTS_OF_PARTICIPANT, new IRI(exampleSign.getId()));
 
                 // Commit to sign MagmaCore service
                 final DbTransformation signChangeSet = signService.createDbTransformation(

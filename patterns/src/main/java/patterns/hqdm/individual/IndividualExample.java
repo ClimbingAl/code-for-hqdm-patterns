@@ -12,6 +12,7 @@ import patterns.hqdm.utils.MermaidUtils;
 import patterns.hqdm.utils.PatternsUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -93,7 +94,7 @@ public class IndividualExample {
                                                 "Possible_World_for_generic_pattern_examples",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfGenericPossibleWorldObject.getId());
+                possibleWorldObject.addValue(HQDM.MEMBER_OF, new IRI(classOfGenericPossibleWorldObject.getId()));
 
                 // Create the start and end events for individual X
                 final Thing individualXBeginningObject = PatternsUtils.createNewBaseObject(
@@ -103,8 +104,8 @@ public class IndividualExample {
                                                 "t0",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                individualXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
-                individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                individualXBeginningObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
+                individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 final Thing individualXEndingObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -113,8 +114,8 @@ public class IndividualExample {
                                                 "t3",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                individualXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
-                individualXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                individualXEndingObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
+                individualXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 final Thing stateOfXBeginningObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -123,8 +124,8 @@ public class IndividualExample {
                                                 "t1",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
-                stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
+                stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 final Thing stateOfXEndingObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -133,8 +134,8 @@ public class IndividualExample {
                                                 "t2",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
-                stateOfXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                stateOfXEndingObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
+                stateOfXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
 
                 // Create the individual object
                 final Thing individualXObject = PatternsUtils.createNewBaseObject(
@@ -144,10 +145,10 @@ public class IndividualExample {
                                                 "Example_individual_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                individualXObject.addValue(HQDM.MEMBER_OF_KIND, individualKindOfXObject.getId());
-                individualXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-                individualXObject.addValue(HQDM.BEGINNING, individualXBeginningObject.getId());
-                individualXObject.addValue(HQDM.ENDING, individualXEndingObject.getId());
+                individualXObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(individualKindOfXObject.getId()));
+                individualXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                individualXObject.addValue(HQDM.BEGINNING, new IRI(individualXBeginningObject.getId()));
+                individualXObject.addValue(HQDM.ENDING, new IRI(individualXEndingObject.getId()));
 
                 // Create the state of X
                 final Thing stateOfXObject = PatternsUtils.createNewBaseObject(
@@ -157,11 +158,11 @@ public class IndividualExample {
                                                 "Example_state_of_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
                                                 "HqdmPatternProject_User1"));
-                stateOfXObject.addValue(HQDM.MEMBER_OF, classOfStateOfXObject.getId());
-                stateOfXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
-                stateOfXObject.addValue(HQDM.BEGINNING, stateOfXBeginningObject.getId());
-                stateOfXObject.addValue(HQDM.ENDING, stateOfXEndingObject.getId());
-                stateOfXObject.addValue(HQDM.TEMPORAL_PART_OF, individualXObject.getId());
+                stateOfXObject.addValue(HQDM.MEMBER_OF, new IRI(classOfStateOfXObject.getId()));
+                stateOfXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                stateOfXObject.addValue(HQDM.BEGINNING, new IRI(stateOfXBeginningObject.getId()));
+                stateOfXObject.addValue(HQDM.ENDING, new IRI(stateOfXEndingObject.getId()));
+                stateOfXObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(individualXObject.getId()));
 
                 // Commit to MC database
                 final DbTransformation individualChangeSet = individualService.createDbTransformation(

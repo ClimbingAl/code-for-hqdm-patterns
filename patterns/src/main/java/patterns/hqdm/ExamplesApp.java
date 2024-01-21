@@ -10,6 +10,8 @@ import patterns.hqdm.individual.IndividualEagleExample;
 import patterns.hqdm.individual.IndividualExample;
 import patterns.hqdm.sign.IdentifierApolloExample;
 import patterns.hqdm.sign.SignExample;
+import patterns.hqdm.system.SystemAndComponentsApolloExample;
+import patterns.hqdm.system.SystemAndComponentsExample;
 import patterns.hqdm.thing.ThingExample;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 
@@ -37,6 +39,9 @@ public class ExamplesApp {
 
         SignExample.createAndAddSignPattern(datasets);
         IdentifierApolloExample.fetchApolloIdentifierFromActivityEditor(datasets);
+
+        SystemAndComponentsExample.createAndAddSystemAndSystemComponentGenericPattern(datasets);
+        SystemAndComponentsApolloExample.createAndAddSystemAndSystemComponentApolloPattern(datasets);
 
         System.out.println("Example file generation done.\n");
 
