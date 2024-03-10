@@ -354,7 +354,7 @@ public class SystemAndComponentsApolloExample {
                         ascentSystemComponent,
                         descentSystemComponent
                         ),
-                List.of("record_created", "record_creator", "comment"),
+                List.of("references"),
                 List.of(lunarLander.getId().split("#")[1]),
                 "systemAndComponentEagleExample");
 
