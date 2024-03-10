@@ -14,6 +14,7 @@ import patterns.hqdm.utils.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
+import uk.gov.gchq.magmacore.hqdm.rdf.iri.RDFS;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
@@ -208,6 +209,7 @@ public class AssociationEagleExample {
                 participantStateOfBuzzAldrinObject.addValue(HQDM.BEGINNING, new IRI(buzzEnteredLM5EventObject.getId()));
                 participantStateOfBuzzAldrinObject.addValue(HQDM.ENDING, new IRI(buzzExitedLM5EventObject.getId()));
                 participantStateOfBuzzAldrinObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(buzzAldrinObject.getId()));
+                participantStateOfBuzzAldrinObject.addValue(RDFS.RDF_TYPE, HQDM.STATE_OF_PERSON);
 
                 // Now make Association
                 final Thing associationBuzzInLM5Object = PatternsUtils.createNewBaseObject(
@@ -229,10 +231,42 @@ public class AssociationEagleExample {
                 participantStateOfBuzzAldrinObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationBuzzInLM5Object.getId()));
                 participantStateOfLunarLanderObject.addValue(HQDM.PARTICIPANT_IN, new IRI(associationBuzzInLM5Object.getId()));
 
+                /// Added beginning and ending of Buzz for diagramming
+                final ZonedDateTime buzzBornDateTime = ZonedDateTime.parse("1930-01-20T20:12:52+00:00[UTC]");
+                final ZonedDateTime buzzEndedDateTime = ZonedDateTime.parse("2028-01-01T20:12:52+00:00[UTC]");
+
+                final Thing buzzBornObject = PatternsUtils.createNewBaseObject(
+                        new HqdmObjectBaseProperties(
+                                HQDM.POINT_IN_TIME,
+                                PatternsUtils.PATTERNS_BASE,
+                                LocalDateTime.ofInstant(buzzBornDateTime.toInstant(),
+                                                ZoneOffset.UTC).toString(),
+                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                "HqdmPatternProject_User1"));
+                buzzBornObject.addValue(HQDM.MEMBER_OF, new IRI(QueryUtils
+                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId()));
+                buzzBornObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
+
+                final Thing buzzEndedObject = PatternsUtils.createNewBaseObject(
+                        new HqdmObjectBaseProperties(
+                                HQDM.POINT_IN_TIME,
+                                PatternsUtils.PATTERNS_BASE,
+                                LocalDateTime.ofInstant(buzzEndedDateTime.toInstant(),
+                                                ZoneOffset.UTC).toString(),
+                                LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                "HqdmPatternProject_User1"));
+                buzzEndedObject.addValue(HQDM.MEMBER_OF, new IRI(QueryUtils
+                                .findThingInServiceByName(mcDatasets, "ClassOfPointInTime__ISO8601_DateTime").getId()));
+                buzzEndedObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
+
+                buzzAldrinObject.addValue(HQDM.BEGINNING, new IRI(buzzBornObject.getId()));
+                buzzAldrinObject.addValue(HQDM.ENDING, new IRI(buzzEndedObject.getId()));
+
                 final DbTransformation associationChangeSet = associationService.createDbTransformation(
                                 List.of(
                                                 classOfStateOfPersonObject,
                                                 personKindObject,
+                                                buzzAldrinObject,
                                                 kindOfCrewInLanderAssociationObject,
                                                 roleOfLunarLanderObject,
                                                 roleOfLunarLanderCrewObject,
@@ -240,7 +274,9 @@ public class AssociationEagleExample {
                                                 buzzExitedLM5EventObject,
                                                 participantStateOfBuzzAldrinObject,
                                                 participantStateOfLunarLanderObject,
-                                                associationBuzzInLM5Object));
+                                                associationBuzzInLM5Object,
+                                                buzzBornObject,
+                                                buzzEndedObject));
                 associationService.runInTransaction(associationChangeSet);
 
                 // Output files
@@ -255,6 +291,14 @@ public class AssociationEagleExample {
                                                 participantStateOfBuzzAldrinObject.getId().split("#")[1],
                                                 participantStateOfLunarLanderObject.getId().split("#")[1]),
                                 "buzzInLM5AssociationAndParticipants");
+                
+                // Create node-edge graphs for the association Eagle page
+                MermaidUtils.writeLRNodeEdgeGraph(List.of(
+                        buzzAldrinObject,
+                        participantStateOfBuzzAldrinObject),
+                        List.of("record_created", "record_creator", "comment"),
+                        List.of(buzzAldrinObject.getId().split("#")[1]),
+                        "buzzAldrin");
 
                 MermaidUtils.writeLRNodeEdgeGraph(List.of(
                                 associationBuzzInLM5Object,
