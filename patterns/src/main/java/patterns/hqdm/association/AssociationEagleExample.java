@@ -11,6 +11,9 @@ import patterns.hqdm.utils.HqdmObjectBaseProperties;
 import patterns.hqdm.utils.MermaidUtils;
 import patterns.hqdm.utils.PatternsUtils;
 import patterns.hqdm.utils.QueryUtils;
+import uk.gov.gchq.magmacore.hqdm.model.ClassOfPointInTime;
+import uk.gov.gchq.magmacore.hqdm.model.PointInTime;
+import uk.gov.gchq.magmacore.hqdm.model.PossibleWorld;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
@@ -40,19 +43,26 @@ public class AssociationEagleExample {
                                 "kind_of_association",
                                 "role"));
 
-                supertypes.forEach(st -> {
-                        st.forEach(tl -> {
-                                System.out.println(tl.getId() + " ");
-                        });
-                        System.out.println(" ");
-                });
-
                 MermaidUtils.writeSupertypeGraph(supertypes, "associationEagleTypes");
+
+                List<List<Thing>> supertypesFull = FindSupertypes.findSuperTypes(List.of(
+                        "association",
+                        "participant",
+                        "state_of_person",
+                        "state_of_functional_object",
+                        "class_of_state_of_functional_object",
+                        "kind_of_functional_object",
+                        "kind_of_person",
+                        "class_of_state_of_person",
+                        "kind_of_association",
+                        "role"));
+
+                MermaidUtils.writeSupertypeGraph(supertypesFull, "associationEagleTypesFull");
 
                 System.out.println("Create Buzz Aldrin association as occupier of Eagle Lander Module data objects!");
                 final MagmaCoreService associationService = MagmaCoreServiceFactory.createWithJenaDatabase();
                 associationService.register(PatternsUtils.PREFIX_LIST);
-
+            
                 // Create Buzz Aldrin as an individual
                 final Thing personKindObject = PatternsUtils.createNewBaseObject(
                                 new HqdmObjectBaseProperties(
@@ -262,6 +272,20 @@ public class AssociationEagleExample {
                 buzzAldrinObject.addValue(HQDM.BEGINNING, new IRI(buzzBornObject.getId()));
                 buzzAldrinObject.addValue(HQDM.ENDING, new IRI(buzzEndedObject.getId()));
 
+                // Bound the LM-5
+                final ClassOfPointInTime classOfPointInTimeObject = (ClassOfPointInTime) QueryUtils.findThingInServiceByName(
+                        mcDatasets,
+                        "ClassOfPointInTime__ISO8601_DateTime");
+
+                final PointInTime landerSystemStartPointInTime = PatternsUtils.createPointInTime(
+                        "1968-01-01T20:17:40+00:00[UTC]", 
+                        classOfPointInTimeObject, 
+                        (PossibleWorld) possibleWorldForEagleExamples, 
+                        "HqdmPatternProject_User1");
+                
+                QueryUtils.findThingByNameInList(apolloPossibleWorldThings,
+                        "Example_individual_that_is_Lunar_Module_Eagle_LM-5").addValue(HQDM.BEGINNING, new IRI(landerSystemStartPointInTime.getId()));
+
                 final DbTransformation associationChangeSet = associationService.createDbTransformation(
                                 List.of(
                                                 classOfStateOfPersonObject,
@@ -276,9 +300,13 @@ public class AssociationEagleExample {
                                                 participantStateOfLunarLanderObject,
                                                 associationBuzzInLM5Object,
                                                 buzzBornObject,
-                                                buzzEndedObject));
+                                                buzzEndedObject,
+                                                landerSystemStartPointInTime));
                 associationService.runInTransaction(associationChangeSet);
 
+                final DbTransformation individualChangeSet = associationService.createDbTransformation(
+                        apolloPossibleWorldThings);
+                associationService.runInTransaction(individualChangeSet);
                 // Output files
 
                 // Create node-edge graphs for the association Eagle page

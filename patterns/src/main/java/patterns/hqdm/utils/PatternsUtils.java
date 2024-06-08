@@ -8,8 +8,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.apache.jena.sparql.function.library.date;
-
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfPointInTime;
 import uk.gov.gchq.magmacore.hqdm.model.PointInTime;
 import uk.gov.gchq.magmacore.hqdm.model.PossibleWorld;
