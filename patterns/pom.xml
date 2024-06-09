@@ -22,22 +22,27 @@
     <dependency>
       <groupId>uk.gov.gchq.magma-core</groupId>
       <artifactId>core</artifactId>
-      <version>3.0.3-SNAPSHOT</version>
+      <version>4.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.gov.gchq.magma-core</groupId>
       <artifactId>hqdm</artifactId>
-      <version>3.0.3-SNAPSHOT</version>
-    </dependency>  
-    <dependency>
-      <groupId>uk.gov.gchq.magma-core</groupId>
-      <artifactId>hqdm-rdf</artifactId>
-      <version>3.0.3-SNAPSHOT</version>
+      <version>4.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>uk.gov.gchq.magma-core</groupId>
-      <artifactId>hqdm-rdf-canonical</artifactId>
-      <version>3.0.3-SNAPSHOT</version>
+      <artifactId>hqdm-canonical</artifactId>
+      <version>4.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>uk.gov.gchq.magma-core</groupId>
+      <artifactId>model-extension-example</artifactId>
+      <version>4.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>hqdm.utils</groupId>
+      <artifactId>hqdm-utils</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

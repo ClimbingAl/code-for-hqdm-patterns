@@ -6,10 +6,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import patterns.hqdm.utils.HqdmObjectBaseProperties;
-import patterns.hqdm.utils.MermaidUtils;
-import patterns.hqdm.utils.PatternsUtils;
-import patterns.hqdm.utils.QueryUtils;
+import hqdm.utils.base.BaseCollection;
+import hqdm.utils.base.HqdmObjectBaseProperties;
+import hqdm.utils.base.IriUtils;
+import hqdm.utils.mermaid.MermaidUtils;
+import hqdm.utils.query.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfInstalledFunctionalSystemComponent;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfPointInTime;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfStateOfOrdinaryFunctionalObject;
@@ -33,7 +34,6 @@ import uk.gov.gchq.magmacore.hqdm.rdfbuilders.InstalledFunctionalSystemComponent
 import uk.gov.gchq.magmacore.hqdm.rdfbuilders.KindOfFunctionalSystemComponentBuilder;
 import uk.gov.gchq.magmacore.hqdm.rdfbuilders.KindOfOrdinaryFunctionalObjectBuilder;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
-import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 
 import static uk.gov.gchq.magmacore.util.UID.uid;
@@ -47,11 +47,9 @@ public class SystemAndComponentsExample {
      * @param mcDatasets {@link List<MagmaCoreService>}.
      * @return
      */
-    public static void createAndAddSystemAndSystemComponentGenericPattern(final List<MagmaCoreService> mcDatasets) {
+    public static void createAndAddSystemAndSystemComponentGenericPattern(BaseCollection baseCollection, final List<MagmaCoreService> mcDatasets, MagmaCoreService systemComponentService, String record_creator) {
 
         System.out.println("Create Generic System and System Components data objects.");
-        final MagmaCoreService systemComponentService = MagmaCoreServiceFactory.createWithJenaDatabase();
-        systemComponentService.register(PatternsUtils.PREFIX_LIST);
 
         // Find existing objects that are members of
         // "Class_of_possible_world_for_abstract_pattern_examples"
@@ -59,110 +57,110 @@ public class SystemAndComponentsExample {
                 mcDatasets,
                 "Possible_World_for_generic_pattern_examples");
         
-        final Role intendedRoleOfSystem = (Role) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final Role intendedRoleOfSystem = (Role) IriUtils.createNewBaseObject( baseCollection,new HqdmObjectBaseProperties(
                     HQDM.ROLE,
-                    PatternsUtils.PATTERNS_REF_BASE,
+                    baseCollection.PATTERNS_REF_BASE,
                     "RoleOfGenericSystem",
                     LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                    "HqdmPatternProject_User1"));
-        intendedRoleOfSystem.addStringValue(PatternsUtils.COMMENT,
+                    record_creator));
+        intendedRoleOfSystem.addStringValue(baseCollection.COMMENT,
                     "Generic_role_of_System_in_intended_activity.");
 
-        final KindOfFunctionalSystem genericSystemKind = (KindOfFunctionalSystem) PatternsUtils.createNewBaseObject(
+        final KindOfFunctionalSystem genericSystemKind = (KindOfFunctionalSystem) IriUtils.createNewBaseObject( baseCollection,
                 new HqdmObjectBaseProperties(
                         HQDM.KIND_OF_FUNCTIONAL_SYSTEM,
-                        PatternsUtils.PATTERNS_REF_BASE,
+                        baseCollection.PATTERNS_REF_BASE,
                         "KindOfFunctionalSystem__Generic_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
-        genericSystemKind.addStringValue(PatternsUtils.COMMENT,
+        genericSystemKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_functional_system_that_is_generic._Note_this_is_subclass_of_class_of_ordinary_functional_object.");
-        genericSystemKind.addValue(HQDM.INTENDED_ROLE_BY_CLASS, new IRI(intendedRoleOfSystem.getId()));
+        genericSystemKind.addValue(HQDM.INTENDED_ROLE_BY_CLASS, intendedRoleOfSystem.getId());
 
         final FunctionalSystem genericSystem = 
-                new FunctionalSystemBuilder(new IRI(PatternsUtils.PATTERNS_BASE, uid()) )
+                new FunctionalSystemBuilder(new IRI(baseCollection.PATTERNS_BASE, uid()) )
                         .member_Of_Kind(genericSystemKind)
                         .intended_Role_M(intendedRoleOfSystem)
                         .part_Of_Possible_World_M(possibleWorldForGenericExamples)
                         .build();
-         PatternsUtils.addBasePropertiesToThing(genericSystem,
+        IriUtils.addBasePropertiesToThing(baseCollection, genericSystem,
                 new HqdmObjectBaseProperties(
                         "An_Actual_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // Create the classes of ordinary functional object that is installed as a system component
-        final Role intendedRoleOfOrdinaryFunctionalObject = (Role) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final Role intendedRoleOfOrdinaryFunctionalObject = (Role) IriUtils.createNewBaseObject( baseCollection,new HqdmObjectBaseProperties(
                     HQDM.ROLE,
-                    PatternsUtils.PATTERNS_REF_BASE,
+                    baseCollection.PATTERNS_REF_BASE,
                     "RoleOfOrdinaryFunctionalObject",
                     LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                    "HqdmPatternProject_User1"));
-        intendedRoleOfOrdinaryFunctionalObject.addStringValue(PatternsUtils.COMMENT,
+                    record_creator));
+        intendedRoleOfOrdinaryFunctionalObject.addStringValue(baseCollection.COMMENT,
                     "Generic_role_of_Ordinary_Functional_Object.");
 
         final KindOfOrdinaryFunctionalObject genericOrdinaryFunctionalObjectKind = new KindOfOrdinaryFunctionalObjectBuilder( 
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()) )
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()) )
                 .intended_Role_By_Class_M(intendedRoleOfOrdinaryFunctionalObject)
                 .build();
-        PatternsUtils.addBasePropertiesToThing( genericOrdinaryFunctionalObjectKind,
+        IriUtils.addBasePropertiesToThing(baseCollection, genericOrdinaryFunctionalObjectKind,
                 new HqdmObjectBaseProperties(
                         "Kind_Of_Generic_Ordinary_Functional_Object",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
         
         final ClassOfStateOfOrdinaryFunctionalObject ordinaryFunctionalObjectClassOfState = new ClassOfStateOfOrdinaryFunctionalObjectBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .build();
-        PatternsUtils.addBasePropertiesToThing(ordinaryFunctionalObjectClassOfState,
+        IriUtils.addBasePropertiesToThing(baseCollection,ordinaryFunctionalObjectClassOfState,
                 new HqdmObjectBaseProperties(
                         "ClassOfStateOfOrdinaryFunctionalObject__Class_Of_State_Of_Generic_Ordinary_Functional_Object",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        ordinaryFunctionalObjectClassOfState.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        ordinaryFunctionalObjectClassOfState.addStringValue(baseCollection.COMMENT,
                 "Class_of_state_of_ordinary_functioal_object_whose_members_are_temporal_part_of_members_of_Kind_Of_Ordinary_Functional_Object");
-        ordinaryFunctionalObjectClassOfState.addValue(HQDM.PART__OF_BY_CLASS, new IRI(genericOrdinaryFunctionalObjectKind.getId()));
+        ordinaryFunctionalObjectClassOfState.addValue(HQDM.PART__OF_BY_CLASS, genericOrdinaryFunctionalObjectKind.getId());
 
 
         // Create the classes of system component
-        final Role intendedRoleOfGenericSystemComponent = (Role) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final Role intendedRoleOfGenericSystemComponent = (Role) IriUtils.createNewBaseObject( baseCollection,new HqdmObjectBaseProperties(
                     HQDM.ROLE,
-                    PatternsUtils.PATTERNS_REF_BASE,
+                    baseCollection.PATTERNS_REF_BASE,
                     "RoleOfGenericSystemComponent",
                     LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                    "HqdmPatternProject_User1"));
-        intendedRoleOfGenericSystemComponent.addStringValue(PatternsUtils.COMMENT,
+                    record_creator));
+        intendedRoleOfGenericSystemComponent.addStringValue(baseCollection.COMMENT,
                     "Role_of_Generic_System_Component_when_functioning_in_intended_activities.");
 
         final KindOfFunctionalSystemComponent genericComponentKind = new KindOfFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(genericSystemKind)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(genericComponentKind,
+        IriUtils.addBasePropertiesToThing(baseCollection,genericComponentKind,
                 new HqdmObjectBaseProperties(
                         "KindOfSystemComponent__Kind_of_Generic_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        genericComponentKind.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        genericComponentKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_system_component_whose_members_are_temporal_part_of_members_of_Generic_System");
 
         final ClassOfInstalledFunctionalSystemComponent classOfInstalledGenericOrdinaryFunctionalObject = new ClassOfInstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(genericComponentKind)
                 .has_Superclass(ordinaryFunctionalObjectClassOfState)
                 .has_Superclass(genericComponentKind)  // Should be class of state of this kind.  Optional
                 .build();
-        PatternsUtils.addBasePropertiesToThing(classOfInstalledGenericOrdinaryFunctionalObject,
+        IriUtils.addBasePropertiesToThing(baseCollection,classOfInstalledGenericOrdinaryFunctionalObject,
                 new HqdmObjectBaseProperties(
                         "ClassOfInstalledFunctionalSystemComponent__Class_of_Installed_Generic_Ordinary_Functional_Object",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        classOfInstalledGenericOrdinaryFunctionalObject.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        classOfInstalledGenericOrdinaryFunctionalObject.addStringValue(baseCollection.COMMENT,
                 "Class_of_installed_system_component_whose_members_are_temporal_part_of_members_of_Kind_Of_Generic_Ordinary_Functional_Object_AND_Kind_of_Generic_Component");
 
         // Add the system component classes to the kind of system that they are components of 
-        genericSystemKind.addValue(HQDM.HAS_COMPONENT_BY_CLASS, new IRI(genericComponentKind.getId()));
+        genericSystemKind.addValue(HQDM.HAS_COMPONENT_BY_CLASS, genericComponentKind.getId());
 
         //////////// CREATE ACTUAL STATES NOW ////////////
         // Events
@@ -170,38 +168,38 @@ public class SystemAndComponentsExample {
                 mcDatasets,
                 "ClassOfPointInTime__ISO8601_DateTime");
 
-        final PointInTime genericSystemStart = PatternsUtils.createPointInTime(
+        final PointInTime genericSystemStart = IriUtils.createPointInTime( baseCollection,
                 "2024-01-01T00:00:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForGenericExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime genericSystemComponentInstalledStart = PatternsUtils.createPointInTime(
+        final PointInTime genericSystemComponentInstalledStart = IriUtils.createPointInTime( baseCollection,
                 "2024-01-14T13:31:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForGenericExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime genericSystemComponentUninstalled = PatternsUtils.createPointInTime(
+        final PointInTime genericSystemComponentUninstalled = IriUtils.createPointInTime( baseCollection,
                 "2024-01-24T13:31:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForGenericExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime genericSystemEnd = PatternsUtils.createPointInTime(
+        final PointInTime genericSystemEnd = IriUtils.createPointInTime( baseCollection,
                 "2024-03-10T00:00:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForGenericExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
 
         // System states
-        genericSystem.addValue(HQDM.BEGINNING, new IRI(genericSystemStart.getId()));
-        genericSystem.addValue(HQDM.ENDING, new IRI(genericSystemEnd.getId()));
+        genericSystem.addValue(HQDM.BEGINNING, genericSystemStart.getId());
+        genericSystem.addValue(HQDM.ENDING, genericSystemEnd.getId());
 
         // System component states
         final FunctionalSystemComponent genericSystemComponent = new FunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForGenericExamples)
                 .member_Of_Kind_M(genericComponentKind)
                 .component_Of_M(genericSystem)
@@ -209,24 +207,24 @@ public class SystemAndComponentsExample {
                 .ending(genericSystemEnd)
                 .intended_Role_M(intendedRoleOfGenericSystemComponent)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(genericSystemComponent,
+        IriUtils.addBasePropertiesToThing(baseCollection,genericSystemComponent,
                 new HqdmObjectBaseProperties(
                         "An_Actual_Generic_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // Actual physical things that are installed, for a period of time, in the genericSystem
-        final OrdinaryFunctionalObject genericObject = (OrdinaryFunctionalObject) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final OrdinaryFunctionalObject genericObject = (OrdinaryFunctionalObject) IriUtils.createNewBaseObject( baseCollection,new HqdmObjectBaseProperties(
                         HQDM.ORDINARY_FUNCTIONAL_OBJECT,
-                        PatternsUtils.PATTERNS_BASE,
+                        baseCollection.PATTERNS_BASE,
                         "An_actual_generic_ordinary_functional_object",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        genericObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForGenericExamples.getId()));
-        genericObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(genericOrdinaryFunctionalObjectKind.getId()));
+                        record_creator));
+        genericObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForGenericExamples.getId());
+        genericObject.addValue(HQDM.MEMBER_OF_KIND, genericOrdinaryFunctionalObjectKind.getId());
 
         final InstalledFunctionalSystemComponent installedGenericObject = new InstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForGenericExamples)
                 .member_Of(classOfInstalledGenericOrdinaryFunctionalObject)
                 .beginning(genericSystemComponentInstalledStart)
@@ -235,11 +233,11 @@ public class SystemAndComponentsExample {
                 .temporal__Part_Of(genericObject)
                 .build();
 
-        PatternsUtils.addBasePropertiesToThing(installedGenericObject,
+        IriUtils.addBasePropertiesToThing(baseCollection,installedGenericObject,
                 new HqdmObjectBaseProperties(
                         "Generic_Object_Installed_As_Generic_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // All system and system component objects created
 
@@ -263,7 +261,7 @@ public class SystemAndComponentsExample {
                         genericObject,
                         installedGenericObject
                         ));
-        systemComponentService.runInTransaction(systemChangeSet);
+        systemComponentService.runInWriteTransaction(systemChangeSet);
 
         // Create node-edge graphs
          MermaidUtils.writeLRNodeEdgeGraph(
@@ -272,7 +270,7 @@ public class SystemAndComponentsExample {
                         genericSystemKind
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1]),
                 "systemAndKindExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -281,7 +279,7 @@ public class SystemAndComponentsExample {
                         genericSystemComponent
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1]),
                 "systemAndComponentExample");
         
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -292,7 +290,7 @@ public class SystemAndComponentsExample {
                         genericComponentKind
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1]),
                 "systemAndComponentAndKindsExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -303,7 +301,7 @@ public class SystemAndComponentsExample {
                         installedGenericObject
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1], genericSystemComponent.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1], genericSystemComponent.getId().toString().split("#")[1]),
                 "systemAndInstalledComponentExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -318,7 +316,7 @@ public class SystemAndComponentsExample {
                         genericSystemEnd
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1], genericSystemComponent.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1], genericSystemComponent.getId().toString().split("#")[1]),
                 "systemAndInstalledComponentEventsExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -339,41 +337,31 @@ public class SystemAndComponentsExample {
                         installedGenericObject
                 ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1], genericSystemComponent.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1], genericSystemComponent.getId().toString().split("#")[1]),
                 "systemAndComponentExampleFull");
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/systemAndComponentPattern.ttl");
-            final PrintStream stmt_stream_out = new PrintStream(
-                    "example-files/systemAndComponentPattern.stmt");
 
             systemComponentService.exportTtl(ttl_stream_out);
             ttl_stream_out.close();
             System.out.println(
                     "\tData being generated as TTL in example-files/systemAndComponentPattern.ttl.");
 
-            systemComponentService.exportStatements(stmt_stream_out);
-            stmt_stream_out.close();
-            System.out.println(
-                    "\tData generated as statements in example-files/systemAndComponentPattern.stmt.");
-
         } catch (FileNotFoundException e) {
             System.err.println("systemAndComponentPattern example write: " + e);
         }
 
-
-
-
         // Create events around this happening        
-        final PointInTime genericSystemComponentReInstalledStart = PatternsUtils.createPointInTime(
+        final PointInTime genericSystemComponentReInstalledStart = IriUtils.createPointInTime( baseCollection,
                 "2024-02-21T09:18:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForGenericExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
         // Create installed state
         final InstalledFunctionalSystemComponent reInstalledGenericObject = new InstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForGenericExamples)
                 .member_Of(classOfInstalledGenericOrdinaryFunctionalObject)
                 .beginning(genericSystemComponentReInstalledStart)
@@ -382,18 +370,18 @@ public class SystemAndComponentsExample {
                 .temporal__Part_Of(genericObject)
                 .build();
 
-        PatternsUtils.addBasePropertiesToThing(reInstalledGenericObject,
+        IriUtils.addBasePropertiesToThing(baseCollection,reInstalledGenericObject,
                 new HqdmObjectBaseProperties(
                         "Generic_Object_Re-Installed_As_Generic_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
          final DbTransformation systemSecondChangeSet = systemComponentService.createDbTransformation(
                 List.of(
                         genericSystemComponentReInstalledStart,
                         reInstalledGenericObject
                         ));
-        systemComponentService.runInTransaction(systemSecondChangeSet);
+        systemComponentService.runInWriteTransaction(systemSecondChangeSet);
 
         MermaidUtils.writeLRNodeEdgeGraph(
                 List.of(
@@ -403,7 +391,7 @@ public class SystemAndComponentsExample {
                         reInstalledGenericObject
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(genericSystem.getId().split("#")[1]),
+                List.of(genericSystem.getId().toString().split("#")[1]),
                 "systemAndInstalledComponentsExample");
 
         try {

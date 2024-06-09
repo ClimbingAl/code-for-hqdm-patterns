@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import patterns.hqdm.utils.MermaidUtils;
-import patterns.hqdm.utils.QueryUtils;
+import hqdm.utils.mermaid.MermaidUtils;
+import hqdm.utils.query.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
-import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
 
 public class IdentifierApolloExample {
@@ -16,35 +15,35 @@ public class IdentifierApolloExample {
      * Import identifier example pattern, construct DbTransformation for the
      * objects and then commit to database.
      *
-     * @param mcDatasets {@link List<MagmaCoreService>}.
+     * @param dataset {@link List<MagmaCoreService>}.
      * @return
      */
-    public static void fetchApolloIdentifierFromActivityEditor(final List<MagmaCoreService> mcDatasets) {
+    public static void fetchApolloIdentifierFromActivityEditor(MagmaCoreService dataset) {
 
         // Find existing objects that are needed for this example
-        final Thing patternForSaturnVRocketAssembly = QueryUtils.findThingInServiceByName(mcDatasets, "SA-506");
+        final Thing patternForSaturnVRocketAssembly = QueryUtils.findThingInServiceByName(dataset, "SA-506");
 
-        final Thing identifierForSaturnVRocketAssembly = QueryUtils.findThingsInServiceByPredicateAndValue(mcDatasets,
+        final Thing identifierForSaturnVRocketAssembly = QueryUtils.findThingsInServiceByPredicateAndValue(dataset,
                 HQDM.CONSISTS_OF_BY_CLASS,
-                new IRI(patternForSaturnVRocketAssembly.getId())).get(0);
+                patternForSaturnVRocketAssembly.getId()).get(0);
 
         // Create node-edge graphs for the AS-605 identifier example
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
                 patternForSaturnVRocketAssembly,
                 identifierForSaturnVRocketAssembly),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(patternForSaturnVRocketAssembly.getId().split("#")[1]),
+                List.of(patternForSaturnVRocketAssembly.getId().toString().split("#")[1]),
                 "saturnVIdentifier");
 
         final Thing representationBySignForSaturnVRocketAssembly = QueryUtils
-                .findThingsInServiceByPredicateAndValue(mcDatasets,
+                .findThingsInServiceByPredicateAndValue(dataset,
                         HQDM.MEMBER_OF_,
-                        new IRI(identifierForSaturnVRocketAssembly.getId()))
+                        identifierForSaturnVRocketAssembly.getId())
                 .get(0);
 
-        final List<Thing> participantsInRBS = QueryUtils.findThingsInServiceByPredicateAndValue(mcDatasets,
+        final List<Thing> participantsInRBS = QueryUtils.findThingsInServiceByPredicateAndValue(dataset,
                 HQDM.PARTICIPANT_IN,
-                new IRI(representationBySignForSaturnVRocketAssembly.getId()));
+                representationBySignForSaturnVRocketAssembly.getId());
 
         Set<Object> representedPredicateSet = representationBySignForSaturnVRocketAssembly.getPredicates()
                 .get(HQDM.REPRESENTS);
@@ -54,7 +53,7 @@ public class IdentifierApolloExample {
             for (Object entityId : representedPredicateSet) {
                 representedId = entityId.toString();
             }
-            representedThing = QueryUtils.getThingInServicesById(mcDatasets, representedId);
+            representedThing = QueryUtils.getThingInServiceById(dataset, representedId);
         }
 
         // Get kind of thing
@@ -67,7 +66,7 @@ public class IdentifierApolloExample {
                     kindId = entityId.toString();
                 }
             }
-            kindThing = QueryUtils.getThingInServicesById(mcDatasets, kindId);
+            kindThing = QueryUtils.getThingInServiceById(dataset, kindId);
         }
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -77,7 +76,7 @@ public class IdentifierApolloExample {
                 representedThing,
                 kindThing),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(patternForSaturnVRocketAssembly.getId().split("#")[1], representedThing.getId().split("#")[1]),
+                List.of(patternForSaturnVRocketAssembly.getId().toString().split("#")[1], representedThing.getId().toString().split("#")[1]),
                 "saturnVRepresentationBySignAllParticipantRels");
 
         // Create node-edge graphs for the SA-506 identifier example
@@ -98,7 +97,7 @@ public class IdentifierApolloExample {
                 representedThing,
                 kindThing),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(representedThing.getId().split("#")[1]),
+                List.of(representedThing.getId().toString().split("#")[1]),
                 "saturnVObjectsOnly");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -108,8 +107,8 @@ public class IdentifierApolloExample {
                 representedThing,
                 kindThing),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(representationBySignForSaturnVRocketAssembly.getId().split("#")[1],
-                        representedThing.getId().split("#")[1]),
+                List.of(representationBySignForSaturnVRocketAssembly.getId().toString().split("#")[1],
+                        representedThing.getId().toString().split("#")[1]),
                 "saturnVRepresentationBySign");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -121,7 +120,7 @@ public class IdentifierApolloExample {
                 representedThing,
                 kindThing),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(patternForSaturnVRocketAssembly.getId().split("#")[1], representedThing.getId().split("#")[1]),
+                List.of(patternForSaturnVRocketAssembly.getId().toString().split("#")[1], representedThing.getId().toString().split("#")[1]),
                 "saturnVRBSAndIdentifier");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -130,7 +129,7 @@ public class IdentifierApolloExample {
                 representedThing,
                 kindThing),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(patternForSaturnVRocketAssembly.getId().split("#")[1], representedThing.getId().split("#")[1]),
+                List.of(patternForSaturnVRocketAssembly.getId().toString().split("#")[1], representedThing.getId().toString().split("#")[1]),
                 "saturnVIdentifierAndPatternRepresented");
 
     }

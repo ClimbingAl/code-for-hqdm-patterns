@@ -6,15 +6,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import patterns.hqdm.utils.FindSupertypes;
-import patterns.hqdm.utils.HqdmObjectBaseProperties;
-import patterns.hqdm.utils.MermaidUtils;
-import patterns.hqdm.utils.PatternsUtils;
+import hqdm.utils.types.FindSupertypes;
+import hqdm.utils.base.BaseCollection;
+import hqdm.utils.base.HqdmObjectBaseProperties;
+import hqdm.utils.base.IriUtils;
+import hqdm.utils.mermaid.MermaidUtils;
 import uk.gov.gchq.magmacore.hqdm.model.Thing;
 import uk.gov.gchq.magmacore.hqdm.rdf.iri.HQDM;
-import uk.gov.gchq.magmacore.hqdm.rdf.iri.IRI;
 import uk.gov.gchq.magmacore.service.MagmaCoreService;
-import uk.gov.gchq.magmacore.service.MagmaCoreServiceFactory;
 import uk.gov.gchq.magmacore.service.transformation.DbTransformation;
 
 public class IndividualExample {
@@ -27,11 +26,11 @@ public class IndividualExample {
          * @param mcDatasets {@link List<MagmaCoreService>}.
          * @return
          */
-        public static void createAndAddIndividualPattern(final List<MagmaCoreService> mcDatasets) {
+        public static void createAndAddIndividualPattern(BaseCollection baseCollection, final List<MagmaCoreService> mcDatasets, MagmaCoreService individualService, String record_creator) {
 
                 // Find supertypes
                 List<List<Thing>> supertypes = FindSupertypes
-                                .findSuperTypes(List.of("individual", "state", "kind_of_individual", "class_of_state"));
+                                .findSuperTypes(baseCollection, List.of("individual", "state", "kind_of_individual", "class_of_state"));
 
                 supertypes.forEach(st -> {
                         st.forEach(tl -> {
@@ -43,126 +42,124 @@ public class IndividualExample {
                 MermaidUtils.writeSupertypeGraph(supertypes, "individual");
 
                 System.out.println("Create Individual data objects!");
-                final MagmaCoreService individualService = MagmaCoreServiceFactory.createWithJenaDatabase();
-                individualService.register(PatternsUtils.PREFIX_LIST);
 
                 // Create the predicates of the whole-life individual object we want to create.
                 // It needs a class (SET) to be a member_of_kind of
-                final Thing individualKindOfXObject = PatternsUtils.createNewBaseObject(
+                final Thing individualKindOfXObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.KIND_OF_INDIVIDUAL,
-                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                baseCollection.PATTERNS_REF_BASE,
                                                 "KindOfIndividual_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                individualKindOfXObject.addStringValue(PatternsUtils.COMMENT, "Kind_of_X");
+                                                record_creator));
+                individualKindOfXObject.addStringValue(baseCollection.COMMENT, "Kind_of_X");
 
-                final Thing classOfStateOfXObject = PatternsUtils.createNewBaseObject(
+                final Thing classOfStateOfXObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.CLASS_OF_STATE,
-                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                baseCollection.PATTERNS_REF_BASE,
                                                 "ClassOfState_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                classOfStateOfXObject.addStringValue(PatternsUtils.COMMENT, "Class_of_state_of_X");
+                                                record_creator));
+                classOfStateOfXObject.addStringValue(baseCollection.COMMENT, "Class_of_state_of_X");
 
                 // The events need a class_of_point_in_time to be members of
-                final Thing classOfEventObject = PatternsUtils.createNewBaseObject(
+                final Thing classOfEventObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.CLASS_OF_EVENT,
-                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                baseCollection.PATTERNS_REF_BASE,
                                                 "ClassOfEvent_ExampleEvents",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                classOfEventObject.addStringValue(PatternsUtils.COMMENT, "Class_of_event_for_Generic_pattern_examples");
+                                                record_creator));
+                classOfEventObject.addStringValue(baseCollection.COMMENT, "Class_of_event_for_Generic_pattern_examples");
 
-                final Thing classOfGenericPossibleWorldObject = PatternsUtils.createNewBaseObject(
+                final Thing classOfGenericPossibleWorldObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.CLASS_OF_POSSIBLE_WORLD,
-                                                PatternsUtils.PATTERNS_REF_BASE,
+                                                baseCollection.PATTERNS_REF_BASE,
                                                 "ClassOfPossibleWorld__GenericPatternExamples",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                classOfGenericPossibleWorldObject.addStringValue(PatternsUtils.COMMENT,
+                                                record_creator));
+                classOfGenericPossibleWorldObject.addStringValue(baseCollection.COMMENT,
                                 "Class_of_possible_world_for_generic_pattern_examples");
 
                 // Now create the Events and States
-                final Thing possibleWorldObject = PatternsUtils.createNewBaseObject(
+                final Thing possibleWorldObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.POSSIBLE_WORLD,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "Possible_World_for_generic_pattern_examples",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                possibleWorldObject.addValue(HQDM.MEMBER_OF, new IRI(classOfGenericPossibleWorldObject.getId()));
+                                                record_creator));
+                possibleWorldObject.addValue(HQDM.MEMBER_OF, classOfGenericPossibleWorldObject.getId());
 
                 // Create the start and end events for individual X
-                final Thing individualXBeginningObject = PatternsUtils.createNewBaseObject(
+                final Thing individualXBeginningObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.EVENT,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "t0",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                individualXBeginningObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
-                individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                                                record_creator));
+                individualXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+                individualXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-                final Thing individualXEndingObject = PatternsUtils.createNewBaseObject(
+                final Thing individualXEndingObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.EVENT,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "t3",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                individualXEndingObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
-                individualXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                                                record_creator));
+                individualXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+                individualXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-                final Thing stateOfXBeginningObject = PatternsUtils.createNewBaseObject(
+                final Thing stateOfXBeginningObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.EVENT,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "t1",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
-                stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                                                record_creator));
+                stateOfXBeginningObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+                stateOfXBeginningObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
-                final Thing stateOfXEndingObject = PatternsUtils.createNewBaseObject(
+                final Thing stateOfXEndingObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.EVENT,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "t2",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                stateOfXEndingObject.addValue(HQDM.MEMBER_OF, new IRI(classOfEventObject.getId()));
-                stateOfXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
+                                                record_creator));
+                stateOfXEndingObject.addValue(HQDM.MEMBER_OF, classOfEventObject.getId());
+                stateOfXEndingObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
 
                 // Create the individual object
-                final Thing individualXObject = PatternsUtils.createNewBaseObject(
+                final Thing individualXObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.INDIVIDUAL,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "Example_individual_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                individualXObject.addValue(HQDM.MEMBER_OF_KIND, new IRI(individualKindOfXObject.getId()));
-                individualXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
-                individualXObject.addValue(HQDM.BEGINNING, new IRI(individualXBeginningObject.getId()));
-                individualXObject.addValue(HQDM.ENDING, new IRI(individualXEndingObject.getId()));
+                                                record_creator));
+                individualXObject.addValue(HQDM.MEMBER_OF_KIND, individualKindOfXObject.getId());
+                individualXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                individualXObject.addValue(HQDM.BEGINNING, individualXBeginningObject.getId());
+                individualXObject.addValue(HQDM.ENDING, individualXEndingObject.getId());
 
                 // Create the state of X
-                final Thing stateOfXObject = PatternsUtils.createNewBaseObject(
+                final Thing stateOfXObject = IriUtils.createNewBaseObject( baseCollection,
                                 new HqdmObjectBaseProperties(
                                                 HQDM.STATE,
-                                                PatternsUtils.PATTERNS_BASE,
+                                                baseCollection.PATTERNS_BASE,
                                                 "Example_state_of_X",
                                                 LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                                                "HqdmPatternProject_User1"));
-                stateOfXObject.addValue(HQDM.MEMBER_OF, new IRI(classOfStateOfXObject.getId()));
-                stateOfXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldObject.getId()));
-                stateOfXObject.addValue(HQDM.BEGINNING, new IRI(stateOfXBeginningObject.getId()));
-                stateOfXObject.addValue(HQDM.ENDING, new IRI(stateOfXEndingObject.getId()));
-                stateOfXObject.addValue(HQDM.TEMPORAL_PART_OF, new IRI(individualXObject.getId()));
+                                                record_creator));
+                stateOfXObject.addValue(HQDM.MEMBER_OF, classOfStateOfXObject.getId());
+                stateOfXObject.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+                stateOfXObject.addValue(HQDM.BEGINNING, stateOfXBeginningObject.getId());
+                stateOfXObject.addValue(HQDM.ENDING, stateOfXEndingObject.getId());
+                stateOfXObject.addValue(HQDM.TEMPORAL_PART_OF, individualXObject.getId());
 
                 // Commit to MC database
                 final DbTransformation individualChangeSet = individualService.createDbTransformation(
@@ -177,12 +174,12 @@ public class IndividualExample {
                                                 stateOfXEndingObject,
                                                 individualXObject,
                                                 stateOfXObject));
-                individualService.runInTransaction(individualChangeSet);
+                individualService.runInWriteTransaction(individualChangeSet);
 
                 // Create node-edge graphs for the individual page
                 MermaidUtils.writeLRNodeEdgeGraph(List.of(individualXObject, individualKindOfXObject),
                                 List.of("record_created", "record_creator", "comment"),
-                                List.of(individualXObject.getId().split("#")[1]),
+                                List.of(individualXObject.getId().toString().split("#")[1]),
                                 "individualAndKind");
 
                 MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -198,20 +195,15 @@ public class IndividualExample {
                                 stateOfXBeginningObject,
                                 stateOfXEndingObject),
                                 List.of("record_created", "record_creator", "comment"),
-                                List.of(individualXObject.getId().split("#")[1]),
+                                List.of(individualXObject.getId().toString().split("#")[1]),
                                 "individualExample");
 
                 try {
                         final PrintStream ttl_stream_out = new PrintStream("example-files/individualPattern.ttl");
-                        final PrintStream stmt_stream_out = new PrintStream("example-files/individualPattern.stmt");
 
                         individualService.exportTtl(ttl_stream_out);
                         ttl_stream_out.close();
                         System.out.println("\tData being generated as TTL in example-files/individualPattern.ttl.");
-
-                        individualService.exportStatements(stmt_stream_out);
-                        stmt_stream_out.close();
-                        System.out.println("\tData generated as statements in example-files/individualPattern.stmt.");
 
                 } catch (FileNotFoundException e) {
                         System.err.println("individualPattern example write: " + e);

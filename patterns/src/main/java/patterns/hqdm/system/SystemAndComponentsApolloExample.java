@@ -7,10 +7,12 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import patterns.hqdm.utils.HqdmObjectBaseProperties;
-import patterns.hqdm.utils.MermaidUtils;
-import patterns.hqdm.utils.PatternsUtils;
-import patterns.hqdm.utils.QueryUtils;
+import hqdm.utils.types.FindSupertypes;
+import hqdm.utils.base.BaseCollection;
+import hqdm.utils.base.HqdmObjectBaseProperties;
+import hqdm.utils.base.IriUtils;
+import hqdm.utils.mermaid.MermaidUtils;
+import hqdm.utils.query.QueryUtils;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfInstalledFunctionalSystemComponent;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfPointInTime;
 import uk.gov.gchq.magmacore.hqdm.model.ClassOfStateOfFunctionalSystem;
@@ -47,11 +49,9 @@ public class SystemAndComponentsApolloExample {
      * @param mcDatasets {@link List<MagmaCoreService>}.
      * @return
      */
-    public static void createAndAddSystemAndSystemComponentApolloPattern(final List<MagmaCoreService> mcDatasets) {
+    public static void createAndAddSystemAndSystemComponentApolloPattern(BaseCollection baseCollection, final List<MagmaCoreService> mcDatasets, MagmaCoreService systemComponentService, String record_creator) {
 
         System.out.println("Create Eagle System Components data objects.");
-        final MagmaCoreService systemComponentService = MagmaCoreServiceFactory.createWithJenaDatabase();
-        systemComponentService.register(PatternsUtils.PREFIX_LIST);
 
         // Find existing objects that are members of
         // "Class_of_possible_world_for_abstract_pattern_examples"
@@ -63,149 +63,149 @@ public class SystemAndComponentsApolloExample {
                 mcDatasets,
                 "KindOfFunctionalSystem__Lunar_Lander");
 
-        final FunctionalSystem lunarLander = (FunctionalSystem) QueryUtils.findThingsInServiceByPredicateAndValue(
+        final FunctionalSystem lunarLander = (FunctionalSystem) QueryUtils.findThingsInServicesByPredicateAndValue(
                 mcDatasets,
                 HQDM.MEMBER_OF_KIND,
-                new IRI(lunarLanderKind.getId())).get(0);
+                lunarLanderKind.getId()).get(0);
 
         final Thing classOfStateOfLunarLander = QueryUtils.findThingInServiceByName(mcDatasets,
                 "ClassOfStateOfFunctionalSystem__State_Of_Lunar_Lander");
 
         // Create the classes of systems for the Ascent and Descent Systems
 
-        final KindOfFunctionalSystem lunarLanderAscentSystemKind = (KindOfFunctionalSystem) PatternsUtils.createNewBaseObject(
+        final KindOfFunctionalSystem lunarLanderAscentSystemKind = (KindOfFunctionalSystem) IriUtils.createNewBaseObject(baseCollection,
                 new HqdmObjectBaseProperties(
                         HQDM.KIND_OF_FUNCTIONAL_SYSTEM,
-                        PatternsUtils.PATTERNS_REF_BASE,
+                        baseCollection.PATTERNS_REF_BASE,
                         "KindOfFunctionalSystem__Lunar_Lander_Ascent_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
-        lunarLanderAscentSystemKind.addStringValue(PatternsUtils.COMMENT,
+        lunarLanderAscentSystemKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_functional_system_that_is_Lunar_Lander_Ascent_Module._Note_this_is_subclass_of_class_of_ordinary_functional_object.");
 
-        final KindOfFunctionalSystem lunarLanderDescentSystemKind = (KindOfFunctionalSystem) PatternsUtils.createNewBaseObject(
+        final KindOfFunctionalSystem lunarLanderDescentSystemKind = (KindOfFunctionalSystem) IriUtils.createNewBaseObject(baseCollection, 
                 new HqdmObjectBaseProperties(
                         HQDM.KIND_OF_FUNCTIONAL_SYSTEM,
-                        PatternsUtils.PATTERNS_REF_BASE,
+                        baseCollection.PATTERNS_REF_BASE,
                         "KindOfFunctionalSystem__Lunar_Lander_Descent_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
-        lunarLanderDescentSystemKind.addStringValue(PatternsUtils.COMMENT,
+        lunarLanderDescentSystemKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_functional_system_that_is_Lunar_Lander_Descent_Module._Note_this_is_subclass_of_class_of_ordinary_functional_object.");
 
         final ClassOfStateOfFunctionalSystem lunarLanderAscentModuleClassOfState = new ClassOfStateOfFunctionalSystemBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .build();
-        PatternsUtils.addBasePropertiesToThing(lunarLanderAscentModuleClassOfState,
+        IriUtils.addBasePropertiesToThing(baseCollection, lunarLanderAscentModuleClassOfState,
                 new HqdmObjectBaseProperties(
                         "ClassOfStateOfFunctionalSystem__Class_Of_State_Of_Lunar_Lander_Ascent_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        lunarLanderAscentModuleClassOfState.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        lunarLanderAscentModuleClassOfState.addStringValue(baseCollection.COMMENT,
                 "Class_of_state_of_functional_system_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Ascent_System");
-        lunarLanderAscentModuleClassOfState.addValue(HQDM.PART__OF_BY_CLASS, new IRI(lunarLanderAscentSystemKind.getId()));
+        lunarLanderAscentModuleClassOfState.addValue(HQDM.PART__OF_BY_CLASS, lunarLanderAscentSystemKind.getId());
 
         final ClassOfStateOfFunctionalSystem lunarLanderDescentModuleClassOfState = new ClassOfStateOfFunctionalSystemBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .build();
-        PatternsUtils.addBasePropertiesToThing(lunarLanderDescentModuleClassOfState,
+        IriUtils.addBasePropertiesToThing(baseCollection, lunarLanderDescentModuleClassOfState,
                 new HqdmObjectBaseProperties(
                         "ClassOfStateOfFunctionalSystem__Class_Of_State_Of_Lunar_Lander_Descent_System",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        lunarLanderDescentModuleClassOfState.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        lunarLanderDescentModuleClassOfState.addStringValue(baseCollection.COMMENT,
                 "Class_of_state_of_functional_system_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Descent_System");
-        lunarLanderDescentModuleClassOfState.addValue(HQDM.PART__OF_BY_CLASS, new IRI(lunarLanderDescentSystemKind.getId()));
+        lunarLanderDescentModuleClassOfState.addValue(HQDM.PART__OF_BY_CLASS, lunarLanderDescentSystemKind.getId());
 
         // Create the classes of system components for the Ascent and Descent System
         // components
 
         final KindOfFunctionalSystemComponent lunarLanderAscentSystemComponentKind = new KindOfFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(lunarLanderKind)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(lunarLanderAscentSystemComponentKind,
+        IriUtils.addBasePropertiesToThing(baseCollection, lunarLanderAscentSystemComponentKind,
                 new HqdmObjectBaseProperties(
                         "KindOfSystemComponent__Kind_of_Lunar_Lander_Ascescent_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        lunarLanderAscentSystemComponentKind.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        lunarLanderAscentSystemComponentKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_system_component_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Asescent_System");
 
         final ClassOfInstalledFunctionalSystemComponent classOfInstalledLunarLanderAscentModule = new ClassOfInstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(lunarLanderAscentSystemComponentKind)
                 .has_Superclass(lunarLanderAscentModuleClassOfState)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(classOfInstalledLunarLanderAscentModule,
+        IriUtils.addBasePropertiesToThing(baseCollection, classOfInstalledLunarLanderAscentModule,
                 new HqdmObjectBaseProperties(
                         "ClassOfInstalledFunctionalSystemComponent__Class_of_Installed_Lunar_Lander_Ascent_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        classOfInstalledLunarLanderAscentModule.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        classOfInstalledLunarLanderAscentModule.addStringValue(baseCollection.COMMENT,
                 "Class_of_installed_system_component_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Ascent_System_AND_Lunar_Lander_Ascent_System_Component");
 
         final KindOfFunctionalSystemComponent lunarLanderDescentSystemComponentKind = new KindOfFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(lunarLanderKind)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(lunarLanderDescentSystemComponentKind,
+        IriUtils.addBasePropertiesToThing(baseCollection, lunarLanderDescentSystemComponentKind,
                 new HqdmObjectBaseProperties(
                         "KindOfSystemComponent__Kind_of_Lunar_Lander_Ascescent_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        lunarLanderDescentSystemComponentKind.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        lunarLanderDescentSystemComponentKind.addStringValue(baseCollection.COMMENT,
                 "Kind_of_system_component_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Descent_System");
 
         final ClassOfInstalledFunctionalSystemComponent classOfInstalledLunarLanderDescentModule = new ClassOfInstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_REF_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_REF_BASE, uid()))
                 .part__Of_By_Class(lunarLanderDescentSystemComponentKind)
                 .has_Superclass(lunarLanderDescentModuleClassOfState)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(classOfInstalledLunarLanderDescentModule,
+        IriUtils.addBasePropertiesToThing(baseCollection, classOfInstalledLunarLanderDescentModule,
                 new HqdmObjectBaseProperties(
                         "ClassOfInstalledFunctionalSystemComponent__Class_of_Installed_Lunar_Lander_Descent_System_Component",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        classOfInstalledLunarLanderDescentModule.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        classOfInstalledLunarLanderDescentModule.addStringValue(baseCollection.COMMENT,
                 "Class_of_installed_system_component_whose_members_are_temporal_part_of_members_of_Lunar_Lander_Descent_System_AND_Lunar_Lander_Descent_System_Component");
         
         // Placeholder roles - need to join with Activity Modeller roles. Builders not used here as cardinality dependencies can't yet be met.
-        final Role intendedRoleOfDescentSystemComponent = (Role) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final Role intendedRoleOfDescentSystemComponent = (Role) IriUtils.createNewBaseObject(baseCollection, new HqdmObjectBaseProperties(
                     HQDM.ROLE,
-                    PatternsUtils.PATTERNS_REF_BASE,
+                    baseCollection.PATTERNS_REF_BASE,
                     "RoleOfLunarLanderDescentSystemComponent",
                     LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                    "HqdmPatternProject_User1"));
-        intendedRoleOfDescentSystemComponent.addStringValue(PatternsUtils.COMMENT,
+                    record_creator));
+        intendedRoleOfDescentSystemComponent.addStringValue(baseCollection.COMMENT,
                     "Generic_role_of_Lunar_Lander_Descent_Module_System_Component_when_functioning_in_intended_activities.");
 
-        final Role intendedRoleOfAscentSystemComponent = (Role) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final Role intendedRoleOfAscentSystemComponent = (Role) IriUtils.createNewBaseObject(baseCollection, new HqdmObjectBaseProperties(
                     HQDM.ROLE,
-                    PatternsUtils.PATTERNS_REF_BASE,
+                    baseCollection.PATTERNS_REF_BASE,
                     "RoleOfLunarLanderAscentSystemComponent",
                     LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                    "HqdmPatternProject_User1"));
-        intendedRoleOfAscentSystemComponent.addStringValue(PatternsUtils.COMMENT,
+                    record_creator));
+        intendedRoleOfAscentSystemComponent.addStringValue(baseCollection.COMMENT,
                     "Generic_role_of_Lunar_Lander_Ascent_Module_System_Component_when_functioning_in_intended_activities.");
 
         // Add the system component classes to the Lunar Lander as
         // consists_of_component_by_class
         final KindOfFunctionalSystem lunarLanderKindModified = new KindOfFunctionalSystemBuilder(
-                new IRI(lunarLanderKind.getId()))
+                lunarLanderKind.getId())
                 .has_Component_By_Class_M(lunarLanderAscentSystemComponentKind)
                 .has_Component_By_Class_M(lunarLanderDescentSystemComponentKind)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(lunarLanderKindModified,
+        IriUtils.addBasePropertiesToThing(baseCollection, lunarLanderKindModified,
                 new HqdmObjectBaseProperties(
                         "KindOfFunctionalSystem__Lunar_Lander",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        lunarLanderKindModified.addStringValue(PatternsUtils.COMMENT,
+                        record_creator));
+        lunarLanderKindModified.addStringValue(baseCollection.COMMENT,
                 "Kind_of_functional_system_that_is_Lunar_Lander._Note_this_is_subclass_of_class_of_ordinary_functional_object.");
-        lunarLanderKindModified.addStringValue(PatternsUtils.COMMENT,
+        lunarLanderKindModified.addStringValue(baseCollection.COMMENT,
                 "Modified_reference_data_class_during_system_and_system_component_Apollo_worked_example.");
 
         //////////// CREATE ACTUAL STATES NOW ////////////
@@ -218,66 +218,66 @@ public class SystemAndComponentsApolloExample {
         final PointInTime landerSystemEndPointInTime = (PointInTime) QueryUtils.findThingInServiceByName(mcDatasets,
                 "1969-07-21T17:54:01");
 
-        final PointInTime landerSystemStartPointInTime = PatternsUtils.createPointInTime(
+        final PointInTime landerSystemStartPointInTime = IriUtils.createPointInTime( baseCollection,
                 "1968-01-01T20:17:40+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForEagleExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime landerDescentSystemInstalledStartPointInTime = PatternsUtils.createPointInTime(
+        final PointInTime landerDescentSystemInstalledStartPointInTime = IriUtils.createPointInTime( baseCollection,
                 "1968-01-14T20:32:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForEagleExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime landerAscentSystemInstalledStartPointInTime = PatternsUtils.createPointInTime(
+        final PointInTime landerAscentSystemInstalledStartPointInTime = IriUtils.createPointInTime( baseCollection,
                 "1968-03-23T18:56:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForEagleExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
         // System component states
         final FunctionalSystemComponent ascentSystemComponent = new FunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForEagleExamples)
                 .member_Of_Kind_M(lunarLanderAscentSystemComponentKind)
                 .component_Of_M(lunarLander)
                 .beginning(landerSystemStartPointInTime)
                 .intended_Role_M(intendedRoleOfAscentSystemComponent)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(ascentSystemComponent,
+        IriUtils.addBasePropertiesToThing(baseCollection, ascentSystemComponent,
                 new HqdmObjectBaseProperties(
                         "Ascent_Module_System_Component_1969-059C",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         final FunctionalSystemComponent descentSystemComponent = new FunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForEagleExamples)
                 .member_Of_Kind_M(lunarLanderDescentSystemComponentKind)
                 .component_Of_M(lunarLander)
                 .beginning(landerSystemStartPointInTime)
                 .intended_Role_M(intendedRoleOfDescentSystemComponent)
                 .build();
-        PatternsUtils.addBasePropertiesToThing(descentSystemComponent,
+        IriUtils.addBasePropertiesToThing(baseCollection,descentSystemComponent,
                 new HqdmObjectBaseProperties(
                         "Descent_Module_System_Component_1969-059D",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // Systems that are installed, for a period of time, in LM-5
         // Ascent system
-        final FunctionalSystem ascentSystem = (FunctionalSystem) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final FunctionalSystem ascentSystem = (FunctionalSystem) IriUtils.createNewBaseObject(baseCollection, new HqdmObjectBaseProperties(
                         HQDM.FUNCTIONAL_SYSTEM,
-                        PatternsUtils.PATTERNS_BASE,
+                        baseCollection.PATTERNS_BASE,
                         "Ascent_Module_Functional_System_1969-059C",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        ascentSystem.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
-        ascentSystem.addValue(HQDM.MEMBER_OF_KIND, new IRI(lunarLanderAscentSystemKind.getId()));
+                        record_creator));
+        ascentSystem.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+        ascentSystem.addValue(HQDM.MEMBER_OF_KIND, lunarLanderAscentSystemKind.getId());
 
         final InstalledFunctionalSystemComponent installedAscentSystem = new InstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForEagleExamples)
                 .member_Of(classOfInstalledLunarLanderAscentModule)
                 .beginning(landerAscentSystemInstalledStartPointInTime)
@@ -286,24 +286,24 @@ public class SystemAndComponentsApolloExample {
                 .temporal__Part_Of(ascentSystem)
                 .build();
 
-        PatternsUtils.addBasePropertiesToThing(installedAscentSystem,
+        IriUtils.addBasePropertiesToThing(baseCollection, installedAscentSystem,
                 new HqdmObjectBaseProperties(
                         "Ascent_Module_Installed_As_LM-5_System_Component_1969-059C",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // Descent system
-        final FunctionalSystem descentSystem = (FunctionalSystem) PatternsUtils.createNewBaseObject(new HqdmObjectBaseProperties(
+        final FunctionalSystem descentSystem = (FunctionalSystem) IriUtils.createNewBaseObject(baseCollection, new HqdmObjectBaseProperties(
                         HQDM.FUNCTIONAL_SYSTEM,
-                        PatternsUtils.PATTERNS_REF_BASE,
+                        baseCollection.PATTERNS_REF_BASE,
                         "Descent_Module_Functional_System_1969-059D",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
-        descentSystem.addValue(HQDM.PART_OF_POSSIBLE_WORLD, new IRI(possibleWorldForEagleExamples.getId()));
-        descentSystem.addValue(HQDM.MEMBER_OF_KIND, new IRI(lunarLanderDescentSystemKind.getId()));
+                        record_creator));
+        descentSystem.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldForEagleExamples.getId());
+        descentSystem.addValue(HQDM.MEMBER_OF_KIND, lunarLanderDescentSystemKind.getId());
 
         final InstalledFunctionalSystemComponent installedDescentSystem = new InstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForEagleExamples)
                 .member_Of(classOfInstalledLunarLanderDescentModule)
                 .beginning(landerDescentSystemInstalledStartPointInTime)
@@ -312,11 +312,11 @@ public class SystemAndComponentsApolloExample {
                 .temporal__Part_Of(descentSystem)
                 .build();
 
-        PatternsUtils.addBasePropertiesToThing(installedDescentSystem,
+        IriUtils.addBasePropertiesToThing(baseCollection, installedDescentSystem,
                 new HqdmObjectBaseProperties(
                         "Descent_Module_Installed_As_LM-5_System_Component_1969-059D",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
         // All system and system component objects created
 
@@ -345,7 +345,7 @@ public class SystemAndComponentsApolloExample {
                         installedAscentSystem,
                         descentSystem,
                         installedDescentSystem));
-        systemComponentService.runInTransaction(systemChangeSet);
+        systemComponentService.runInWriteTransaction(systemChangeSet);
 
         // Create node-edge graphs
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -355,7 +355,7 @@ public class SystemAndComponentsApolloExample {
                         descentSystemComponent
                         ),
                 List.of("references"),
-                List.of(lunarLander.getId().split("#")[1]),
+                List.of(lunarLander.getId().toString().split("#")[1]),
                 "systemAndComponentEagleExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -369,7 +369,7 @@ public class SystemAndComponentsApolloExample {
                         installedDescentSystem
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(lunarLander.getId().split("#")[1]),
+                List.of(lunarLander.getId().toString().split("#")[1]),
                 "systemAndInstalledComponentEagleExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(
@@ -387,7 +387,7 @@ public class SystemAndComponentsApolloExample {
                         landerSystemEndPointInTime
                         ),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(lunarLander.getId().split("#")[1]),
+                List.of(lunarLander.getId().toString().split("#")[1]),
                 "systemAndInstalledComponentEventsEagleExample");
 
         MermaidUtils.writeLRNodeEdgeGraph(List.of(
@@ -414,23 +414,16 @@ public class SystemAndComponentsApolloExample {
                 descentSystem,
                 installedDescentSystem),
                 List.of("record_created", "record_creator", "comment"),
-                List.of(lunarLander.getId().split("#")[1]),
+                List.of(lunarLander.getId().toString().split("#")[1]),
                 "systemAndComponentEagleExampleFull");
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/systemAndComponentEaglePattern.ttl");
-            final PrintStream stmt_stream_out = new PrintStream(
-                    "example-files/systemAndComponentEaglePattern.stmt");
 
             systemComponentService.exportTtl(ttl_stream_out);
             ttl_stream_out.close();
             System.out.println(
                     "\tData being generated as TTL in example-files/systemAndComponentEaglePattern.ttl.");
-
-            systemComponentService.exportStatements(stmt_stream_out);
-            stmt_stream_out.close();
-            System.out.println(
-                    "\tData generated as statements in example-files/systemAndComponentEaglePattern.stmt.");
 
         } catch (FileNotFoundException e) {
             System.err.println("systemAndComponentEaglePattern example write: " + e);
@@ -444,21 +437,21 @@ public class SystemAndComponentsApolloExample {
 
 
         // Create events around this happening
-        final PointInTime landerAscentSystemFactoryFirstInstallPointInTime = PatternsUtils.createPointInTime(
+        final PointInTime landerAscentSystemFactoryFirstInstallPointInTime = IriUtils.createPointInTime( baseCollection,
                 "1968-01-26T09:23:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForEagleExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
-        final PointInTime landerAscentSystemFactoryUninistallPointInTime = PatternsUtils.createPointInTime(
+        final PointInTime landerAscentSystemFactoryUninistallPointInTime = IriUtils.createPointInTime( baseCollection,
                 "1968-02-18T15:42:00+00:00[UTC]", 
                 classOfPointInTimeObject, 
                 possibleWorldForEagleExamples, 
-                "HqdmPatternProject_User1");
+                record_creator);
 
         // Create installed state
          final InstalledFunctionalSystemComponent initialInstalledAscentSystem = new InstalledFunctionalSystemComponentBuilder(
-                new IRI(PatternsUtils.PATTERNS_BASE, uid()))
+                new IRI(baseCollection.PATTERNS_BASE, uid()))
                 .part_Of_Possible_World_M(possibleWorldForEagleExamples)
                 .member_Of(classOfInstalledLunarLanderAscentModule)
                 .beginning(landerAscentSystemFactoryFirstInstallPointInTime)
@@ -467,11 +460,11 @@ public class SystemAndComponentsApolloExample {
                 .temporal__Part_Of(ascentSystem)
                 .build();
 
-        PatternsUtils.addBasePropertiesToThing(initialInstalledAscentSystem,
+                IriUtils.addBasePropertiesToThing(baseCollection, initialInstalledAscentSystem,
                 new HqdmObjectBaseProperties(
                         "Ascent_Module_Initial_Test_Install_As_LM-5_System_Component_1969-059C",
                         LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
-                        "HqdmPatternProject_User1"));
+                        record_creator));
 
          final DbTransformation systemSecondChangeSet = systemComponentService.createDbTransformation(
                 List.of(
@@ -479,7 +472,7 @@ public class SystemAndComponentsApolloExample {
                         landerAscentSystemFactoryUninistallPointInTime,
                         initialInstalledAscentSystem
                         ));
-        systemComponentService.runInTransaction(systemSecondChangeSet);
+        systemComponentService.runInWriteTransaction(systemSecondChangeSet);
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/systemInstallAndUinistallEaglePattern.ttl");
