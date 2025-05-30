@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>patterns.hqdm</groupId>
-  <artifactId>thing</artifactId>
+  <artifactId>temporalAlgebra</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>thing</name>
+  <name>temporalAlgebra</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
- <dependencies>
+<dependencies>
     <dependency>
       <groupId>uk.gov.gchq.magma-core</groupId>
       <artifactId>core</artifactId>
@@ -42,6 +40,11 @@
     <dependency>
       <groupId>hqdm.utils</groupId>
       <artifactId>hqdm-utils</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>patterns.hqdm</groupId>
+      <artifactId>thing</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>

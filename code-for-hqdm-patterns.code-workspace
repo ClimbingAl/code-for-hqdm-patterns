@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../home/vscode/dependencies/hqdm-utils"
+		},
+		{
+			"path": "../../home/vscode/dependencies/MagmaCore"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+		"java.format.settings.profile": "GoogleStyle",
+		"java.debug.settings.onBuildFailureProceed": true
+	}
+}
