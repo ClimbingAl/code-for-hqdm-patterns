@@ -28,7 +28,8 @@ public class TemporalAlgebraApp {
         MagmaCoreService temporalAlgebraService = MagmaCoreServiceFactory.createWithJenaDatabase();
         temporalAlgebraService.register(baseCollection.PREFIX_LIST);
         TemporalAlgebraExamples.createAndAddTemporalAlgebraExampleObjects( baseCollection, datasets, temporalAlgebraService, record_creator );
-        datasets.add(temporalAlgebraService);
+        
+        
 
         
     }

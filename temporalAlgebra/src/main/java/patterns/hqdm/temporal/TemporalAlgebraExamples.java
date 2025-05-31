@@ -64,7 +64,7 @@ public class TemporalAlgebraExamples {
      * 
      * 17. Object I ( , t2) is equal to Object J ( , t2) with definite end only ==> EqualExtentUnboundedStart
      * 
-     * 18. Object K ( t1, ) is equal to Object L ( t1, ) with definite start only ==> EqualExtentUnboundedEnd
+     * 18. Object K ( t1, ) is equal to Object F ( t1, ) with definite start only ==> EqualExtentUnboundedEnd
      * 
      * Currently not tested: DuringFstBothUnbounded, DuringSndBothUnbounded
      * 
@@ -80,7 +80,7 @@ public class TemporalAlgebraExamples {
     public static void createAndAddTemporalAlgebraExampleObjects(
         BaseCollection baseCollection, 
         final List<MagmaCoreService> mcDatasets, 
-        MagmaCoreService temporalAlgebra, 
+        MagmaCoreService temporalAlgebraService, 
         String record_creator) {
 
         System.out.println("Create Temporal Algebra data objects!");
@@ -235,42 +235,162 @@ public class TemporalAlgebraExamples {
         objectA.addValue(HQDM.ENDING, t2.getId());
         objectA.addValue(HQDM.TEMPORAL_PART_OF, objectZ.getId());
 
+        final Thing objectB = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_B",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectB.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectB.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectB.addValue(HQDM.BEGINNING, t3.getId());
+        objectB.addValue(HQDM.ENDING, t6.getId());
 
+        final Thing objectC = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_C",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectC.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectC.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectC.addValue(HQDM.BEGINNING, t2.getId());
+        objectC.addValue(HQDM.ENDING, t5.getId());
+
+        final Thing objectD = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_D",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectD.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectD.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectD.addValue(HQDM.BEGINNING, t2.getId());
+        objectD.addValue(HQDM.ENDING, t4.getId());
+
+        final Thing objectE = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_E",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectE.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectE.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectE.addValue(HQDM.BEGINNING, t1.getId());
+        objectE.addValue(HQDM.ENDING, t6.getId());
+
+        final Thing objectF = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_F",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectF.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectF.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectF.addValue(HQDM.BEGINNING, t1.getId());
+
+        final Thing objectG = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_G",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectG.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectG.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectG.addValue(HQDM.BEGINNING, t1.getId());
+        objectG.addValue(HQDM.ENDING, t5.getId());
+
+        final Thing objectH = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_H",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectH.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectH.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectH.addValue(HQDM.BEGINNING, t1.getId());
+        objectH.addValue(HQDM.ENDING, t2.getId());
+
+       final Thing objectI = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_I",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectI.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectI.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectI.addValue(HQDM.ENDING, t2.getId());
+
+       final Thing objectJ = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_J",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectJ.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectJ.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectJ.addValue(HQDM.ENDING, t2.getId());
+
+        final Thing objectK = IriUtils.createNewBaseObject( baseCollection,
+                        new HqdmObjectBaseProperties(
+                                        HQDM.STATE,
+                                        baseCollection.PATTERNS_BASE,
+                                        "Object_K",
+                                        LocalDateTime.now().toInstant(ZoneOffset.UTC).toString(),
+                                        record_creator));
+        objectK.addValue(HQDM.MEMBER_OF, classOfStateOfObject.getId());
+        objectK.addValue(HQDM.PART_OF_POSSIBLE_WORLD, possibleWorldObject.getId());
+        objectK.addValue(HQDM.BEGINNING, t1.getId());
 
         // Commit to MC database
-        final DbTransformation individualChangeSet = individualService.createDbTransformation(
-                        List.of(individualKindOfXObject,
-                                        classOfStateOfXObject,
-                                        classOfGenericPossibleWorldObject,
-                                        classOfEventObject,
-                                        possibleWorldObject,
-                                        individualXBeginningObject,
-                                        individualXEndingObject,
-                                        stateOfXBeginningObject,
-                                        stateOfXEndingObject,
-                                        individualXObject,
-                                        stateOfXObject));
-        individualService.runInWriteTransaction(individualChangeSet);
+        final DbTransformation temporalAlgebraChangeSet = temporalAlgebraService.createDbTransformation(
+                        List.of(
+                                individualKindOfObject,
+                                classOfStateOfObject,
+                                classOfEventObject,
+                                classOfPossibleWorldObject,
+                                possibleWorldObject,
+                                t1,
+                                t2,
+                                t3,
+                                t4,
+                                t5,
+                                t6,
+                                objectZ,
+                                objectA,
+                                objectB,
+                                objectC,
+                                objectD,
+                                objectE,
+                                objectF,
+                                objectG,
+                                objectH,
+                                objectI,
+                                objectJ,
+                                objectK
+                                ));
 
-
-
-
-
-
-        // Commit to MC database
-        final DbTransformation temporalChangeSet = temporalAlgebra.createDbTransformation(List.of(thingObject));
-        temporalAlgebra.runInWriteTransaction(temporalChangeSet);
+        temporalAlgebraService.runInWriteTransaction(temporalAlgebraChangeSet);
 
         try {
             final PrintStream ttl_stream_out = new PrintStream("example-files/temporalAlgebra.ttl");
 
-            temporalAlgebra.exportTtl(ttl_stream_out);
+            temporalAlgebraService.exportTtl(ttl_stream_out);
             ttl_stream_out.close();
         } catch (FileNotFoundException e) {
             System.err.println("temporal algebra example write: " + e);
         }
 
-        mcDatasets.add(temporalAlgebra);
+        mcDatasets.add(temporalAlgebraService);
 
     }
 
